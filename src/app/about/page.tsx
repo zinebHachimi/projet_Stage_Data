@@ -1,17 +1,24 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { verifySession } from "@/features/auth/session";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/Button";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { TestimonialCarousel } from "@/components/ui/TestimonialCarousel";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("agentic_session")?.value;
+  const session = sessionToken ? await verifySession(sessionToken) : null;
+  const user = session ? { name: session.name, email: session.email } : null;
+
   return (
     <>
       {/* HEADER SECTION */}
-      <Header />
+      <Header user={user} />
 
       {/* SUB BANNER SECTION */}
       <section className="float-left w-100 sub-banner-con position-relative main-box">
@@ -19,18 +26,18 @@ export default function AboutPage() {
           <div className="row align-items-center">
             <div className="col-lg-7 col-md-7">
               <div className="sub-banner-content-con">
-                <h1>About Us</h1>
+                <h1>À Propos de Nous</h1>
                 <p>
-                  Create Realistic AI Chatbots in Minutes—Perfect for Websites, <br />
-                  Apps, and Customer Support.
+                  Solution intelligente de Data Gathering pour la collecte <br />
+                  et le traitement des données pour offres d&apos;emploi basée sur l&apos;IA.
                 </p>
                 <div className="breadcrumb-con d-inline-block">
                   <ol className="breadcrumb mb-0">
                     <li className="breadcrumb-item">
-                      <Link href="/">Home</Link>
+                      <Link href="/">Accueil</Link>
                     </li>
                     <li className="breadcrumb-item active" aria-current="page">
-                      About
+                      À Propos
                     </li>
                   </ol>
                 </div>
@@ -90,33 +97,28 @@ export default function AboutPage() {
                     data-wow-duration="2s"
                     data-wow-delay="0.2s"
                   >
-                    About Us
+                    À Propos
                   </span>
                   <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.2s">
-                    Real Conversations <br />
-                    with Human-Like AI
+                    Collecte & Traitement <br />
+                    Intelligent d&apos;Offres d&apos;Emploi
                   </h2>
                   <p className="wow fadeInLeft" data-wow-duration="2s" data-wow-delay="0.4s">
-                    We’re on a mission to revolutionize how businesses communicate.<br />
-                    Our AI chatbots are designed to be fast, intuitive, and incredibly lifelike
-                    —empowering teams to provide 24/7 support and scale effortlessly.
+                    AlgoJob AI est née de la volonté de simplifier la recherche d&apos;emploi et le data gathering de données professionnelles grâce à l&apos;intelligence artificielle.
                   </p>
                   <p className="wow fadeInLeft prgrph-2" data-wow-duration="2s" data-wow-delay="0.5s">
-                    Whether you&apos;re a startup or a global brand, we make AI accessible,
-                    practical, and impactful.
+                    Notre chatbot intelligent agrège, nettoie et structure les offres d&apos;emploi provenant de multiples plateformes pour vous offrir les opportunités les plus adaptées en temps réel.
                   </p>
                   <ul className="list-unstyled p-0 wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.6s">
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i> Launch your AI chatbot
-                      in minutes—no coding or technical expertise required.
+                      <i className="fa-solid fa-check"></i> Extraction et structuration automatique des données d&apos;offres d&apos;emploi.
                     </li>
                     <li className="position-relative mb-0">
-                      <i className="fa-solid fa-check"></i> Fully customizable to
-                      match your brand voice, workflows, and customer needs.
+                      <i className="fa-solid fa-check"></i> Chatbot conversationnel intelligent pour assister les candidats dans leurs requêtes.
                     </li>
                   </ul>
                   <Button href="#" variant="primary" className="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.7s">
-                    Get Started
+                    Commencer
                   </Button>
                 </div>
               </div>
@@ -137,21 +139,17 @@ export default function AboutPage() {
                     data-wow-duration="2s"
                     data-wow-delay="0.4s"
                   >
-                    Statistics
+                    Statistiques
                   </span>
                   <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.5s">
-                    Trusted by Teams, <br />
-                    Built for Scale
+                    Adopté par les recruteurs, <br />
+                    taillé pour la performance
                   </h2>
                   <p className="wow fadeInLeft p-0" data-wow-duration="2s" data-wow-delay="0.6s">
-                    From growing startups to enterprise-level organizations, our
-                    AI chatbots are trusted to handle thousands of conversations
-                    every day. Designed for speed, reliability, and flexibility,
-                    our platform empowers teams to deliver seamless customer
-                    experiences no matter the size or scale of their operations.
+                    De la startup en croissance aux grandes entreprises, notre solution de Data Gathering structure et qualifie des milliers d&apos;offres d&apos;emploi au quotidien pour accélérer vos analyses de marché. Conçue pour la rapidité et la fiabilité, notre plateforme assiste vos équipes RH et décisionnelles.
                   </p>
                   <Button href="#" variant="primary" className="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.6s">
-                    Get Started
+                    Commencer
                   </Button>
                 </div>
               </div>
@@ -176,7 +174,7 @@ export default function AboutPage() {
                         <AnimatedCounter end={95} />
                       </span>
                       <sup className="d-inline-block black-text">%</sup>
-                      <span className="span-text d-block">Faster Response Time</span>
+                      <span className="span-text d-block">Temps de traitement réduit</span>
                     </div>
                   </div>
                   
@@ -193,7 +191,7 @@ export default function AboutPage() {
                         />
                       </figure>
                       <span className="d-inline-block black-text">24/7</span>
-                      <span className="span-text d-block">Global Availability</span>
+                      <span className="span-text d-block">Disponibilité de l&apos;IA 24h/24</span>
                     </div>
                   </div>
                   
@@ -214,7 +212,7 @@ export default function AboutPage() {
                         <AnimatedCounter end={40} />
                       </span>
                       <sup className="d-inline-block black-text">%</sup>
-                      <span className="span-text d-block">Increase Engagement</span>
+                      <span className="span-text d-block">Pertinence accrue des offres</span>
                     </div>
                   </div>
                   
@@ -234,7 +232,7 @@ export default function AboutPage() {
                         <AnimatedCounter end={10000} />
                       </span>
                       <sup className="d-inline-block black-text">+</sup>
-                      <span className="span-text d-block">Conversations Daily</span>
+                      <span className="span-text d-block">Offres structurées par jour</span>
                     </div>
                   </div>
                 </div>
@@ -253,11 +251,11 @@ export default function AboutPage() {
               data-wow-duration="2s"
               data-wow-delay="0.2s"
             >
-              Our Team
+              Notre Équipe
             </span>
             <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.4s">
-              The Expert Team Behind <br />
-              Our Success
+              L&apos;équipe d&apos;experts derrière <br />
+              notre projet de Data Gathering
             </h2>
           </div>
           
@@ -275,7 +273,7 @@ export default function AboutPage() {
                   />
                 </figure>
                 <h5>Emily Carter</h5>
-                <span className="d-block">Chief Executive Officer</span>
+                <span className="d-block">Co-fondatrice & CEO</span>
                 <ul className="list-unstyled mb-0 social-icons">
                   <li>
                     <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="text-decoration-none">
@@ -309,7 +307,7 @@ export default function AboutPage() {
                   />
                 </figure>
                 <h5>James Thompson</h5>
-                <span className="d-block">Head of Product</span>
+                <span className="d-block">Directeur Produit</span>
                 <ul className="list-unstyled mb-0 social-icons">
                   <li>
                     <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="text-decoration-none">
@@ -343,7 +341,7 @@ export default function AboutPage() {
                   />
                 </figure>
                 <h5>Daniel Reed</h5>
-                <span className="d-block">Lead Software Engineer</span>
+                <span className="d-block">Ingénieur IA Lead</span>
                 <ul className="list-unstyled mb-0 social-icons">
                   <li>
                     <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="text-decoration-none">
@@ -377,7 +375,7 @@ export default function AboutPage() {
                   />
                 </figure>
                 <h5>Olivia Brook</h5>
-                <span className="d-block">Director</span>
+                <span className="d-block">Directrice de Recherche</span>
                 <ul className="list-unstyled mb-0 social-icons">
                   <li>
                     <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="text-decoration-none">
@@ -410,11 +408,11 @@ export default function AboutPage() {
               data-wow-duration="2s"
               data-wow-delay="0.2s"
             >
-              Testimonials
+              Témoignages
             </span>
             <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.4s">
-              Build Trust With Reviews <br />
-              Loved by Businesses Worldwide
+              Faites confiance aux avis de nos partenaires <br />
+              dans le monde entier
             </h2>
           </div>
           <div className="row position-relative wow fadeInUp" data-wow-duration="2s" data-wow-delay="0.4s">
@@ -451,21 +449,20 @@ export default function AboutPage() {
                 data-wow-duration="2s"
                 data-wow-delay="0.2s"
               >
-                Experience Boost
+                Optimisez vos Données
               </span>
               <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.4s">
-                Ready to Supercharge <br />
-                Your Customer Experience?
+                Prêt à structurer votre collecte <br />
+                d&apos;offres d&apos;emploi grâce à l&apos;IA ?
               </h2>
               <p className="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.5s">
-                Start using our AI chatbot today to automate support, boost
-                engagement, and save time.
+                Tirez parti du machine learning pour structurer et classifier vos offres d&apos;emploi automatiquement et gagner un temps précieux.
               </p>
               <Button href="#" variant="primary" className="mr-2">
-                Get Started
+                Commencer
               </Button>
               <Button href="#" variant="secondary">
-                Live Demo
+                Démo en Direct
               </Button>
             </div>
           </div>

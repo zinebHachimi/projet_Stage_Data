@@ -1,7 +1,4 @@
-import Link from "next/link";
 import type { ReactNode } from "react";
-import { Activity } from "lucide-react";
-import { GlassCard } from "@/components/ui/GlassCard";
 
 type AuthPageShellProps = {
   eyebrow: string;
@@ -17,26 +14,60 @@ export function AuthPageShell({
   children,
 }: AuthPageShellProps) {
   return (
-    <main className="grid min-h-screen bg-[radial-gradient(circle_at_top_left,#155e75_0,#07131f_36%,#05070d_74%)] px-5 py-8 text-white">
-      <div className="mx-auto grid w-full max-w-6xl gap-8 lg:grid-cols-[0.9fr_0.7fr] lg:items-center">
-        <section>
-          <Link href="/" className="mb-12 inline-flex items-center gap-3">
-            <span className="grid size-10 place-items-center rounded-full bg-white text-slate-950">
-              <Activity size={20} />
+    <main className="w-100 float-left position-relative main-box" style={{
+      background: "linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)",
+      minHeight: "100vh",
+      display: "flex",
+      alignItems: "center"
+    }}>
+      <div className="container py-5">
+        <div className="row align-items-center">
+          {/* Left Info Column */}
+          <div className="col-lg-6 col-md-12 mb-5 mb-lg-0">
+            <span className="d-block text-uppercase font-weight-700" style={{
+              color: "#0f766e",
+              fontSize: "13px",
+              letterSpacing: "3px"
+            }}>
+              {eyebrow}
             </span>
-            <span className="text-sm font-semibold">Agentic Data Gathering</span>
-          </Link>
-          <p className="text-xs font-medium uppercase tracking-[0.28em] text-cyan-100">
-            {eyebrow}
-          </p>
-          <h1 className="mt-4 max-w-2xl text-5xl font-semibold leading-tight">
-            {title}
-          </h1>
-          <p className="mt-5 max-w-xl text-lg leading-8 text-white/60">{description}</p>
-        </section>
-        <GlassCard className="p-5 sm:p-7" intensity="strong">
-          {children}
-        </GlassCard>
+            <h1 className="mt-3 font-weight-bold mb-4" style={{ color: "#0f172a", fontSize: "40px", lineHeight: "1.2" }}>
+              {title}
+            </h1>
+            <p style={{ color: "#334155", fontSize: "16px", lineHeight: "1.6" }}>
+              {description}
+            </p>
+            
+            {/* AlgoJob AI Support Card */}
+            <div className="mt-4 p-4 rounded-3" style={{
+              backgroundColor: "#ffffff",
+              border: "1px solid #e2e8f0",
+              boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.05)"
+            }}>
+              <h5 className="font-weight-bold" style={{ color: "#0f172a", fontSize: "16px" }}>
+                <i className="fa-solid fa-circle-info mr-2 text-info"></i> Support Technique AlgoJob AI
+              </h5>
+              <p className="small mb-0 mt-2" style={{ color: "#475569", lineHeight: "1.5" }}>
+                Besoin d&apos;aide pour configurer votre compte ou pour utiliser notre outil de data gathering ? Contactez notre assistance technique par email à <strong>support@algojob.ai</strong>.
+              </p>
+            </div>
+          </div>
+
+          {/* Right Form Column */}
+          <div className="col-lg-6 col-md-12">
+            <div className="mx-auto" style={{ maxWidth: "500px" }}>
+              <div style={{
+                backgroundColor: "#ffffff",
+                borderRadius: "24px",
+                border: "1px solid #e2e8f0",
+                boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                padding: "40px"
+              }}>
+                {children}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
   );

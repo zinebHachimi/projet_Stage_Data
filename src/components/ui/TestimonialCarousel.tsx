@@ -5,34 +5,34 @@ import Image from "next/image";
 
 const testimonials = [
   {
-    text: "Since adding the chatbot, our customer support times have dropped by over 50%. It's like having a support!",
-    customer: "Rolex Trought",
-    designation: "Happy Client",
+    text: "Depuis la mise en place de la collecte automatisée par IA, notre temps de veille sur les offres d'emploi a été divisé par deux !",
+    customer: "Sarah Martin",
+    designation: "Responsable RH",
   },
   {
-    text: "We were amazed at how easy it was to set up. Within days, the chatbot was handling real conversations and doing it well.",
-    customer: "Alina Jame",
-    designation: "Happy Client",
+    text: "La structuration des données par IA est d'une précision incroyable. Les compétences et salaires sont extraits parfaitement.",
+    customer: "Marc Dubois",
+    designation: "Data Analyst",
   },
   {
-    text: "Our website engagement shot up after installing the chatbot. Visitors now stay longer and actually get the answers they need instantly.",
-    customer: "Kevin Andrew",
-    designation: "Happy Client",
+    text: "Le chatbot conversationnel permet à nos candidats de trouver les offres correspondantes en quelques secondes.",
+    customer: "Sophie Lambert",
+    designation: "Directrice Recrutement",
   },
   {
-    text: "We serve customers in three time zones, and this chatbot handles it all. No more missed messages or delayed replies.",
-    customer: "Nazish Ehtaon",
-    designation: "Happy Client",
+    text: "Grâce au Data Gathering continu, nous ne manquons plus aucune opportunité d'emploi publiée sur le web.",
+    customer: "Thomas Leroux",
+    designation: "Consultant Emploi",
   },
   {
-    text: "What impressed me most was how natural the chatbot sounds—and we were able to fully match it to our brand voice.",
-    customer: "John Clark",
-    designation: "Happy Client",
+    text: "La plateforme AlgoJob AI s'est parfaitement intégrée à notre système. Une solution performante et très intuitive.",
+    customer: "Julie Bernard",
+    designation: "Responsable Talent Acquisition",
   },
   {
-    text: "It’s not just for support. Our AI chatbot has become a key sales tool, helping qualify leads and guide users through purchases.",
-    customer: "Zampa Devo",
-    designation: "Happy Client",
+    text: "L'IA a transformé notre gestion de données d'emploi. L'analyse prédictive et la classification automatique sont formidables.",
+    customer: "Antoine Petit",
+    designation: "Directeur de Projet",
   },
 ];
 

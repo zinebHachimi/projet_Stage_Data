@@ -13,7 +13,7 @@ type ChatResponse = {
 };
 
 export function ModernChatWindow() {
-  const [prompt, setPrompt] = useState("I want all Data Scientist job offers in Morocco");
+  const [prompt, setPrompt] = useState("Je veux toutes les offres de Data Scientist au Maroc");
   const [response, setResponse] = useState<ChatResponse | null>(null);
   const [isPending, setIsPending] = useState(false);
 
@@ -41,8 +41,8 @@ export function ModernChatWindow() {
           <Sparkles size={18} />
         </div>
         <div>
-          <p className="text-sm font-semibold">Natural language command</p>
-          <p className="text-xs text-white/45">Route-safe client interaction</p>
+          <p className="text-sm font-semibold">Commande en langage naturel</p>
+          <p className="text-xs text-white/45">Interaction client sécurisée</p>
         </div>
       </div>
 
@@ -58,7 +58,7 @@ export function ModernChatWindow() {
           className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-cyan-200 px-5 text-sm font-semibold text-slate-950 transition hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
         >
           <SendHorizonal size={16} />
-          {isPending ? "Parsing" : "Ask"}
+          {isPending ? "Analyse..." : "Demander"}
         </button>
       </form>
 
@@ -66,7 +66,7 @@ export function ModernChatWindow() {
         <div className="mt-4 rounded-2xl border border-white/10 bg-slate-950/35 p-4 text-sm text-white/70">
           <p>{response.reply}</p>
           <p className="mt-3 text-xs text-cyan-100">
-            Intent: {response.parsedIntent.role} in {response.parsedIntent.country}
+            Intention : {response.parsedIntent.role} en/au {response.parsedIntent.country}
           </p>
         </div>
       ) : null}

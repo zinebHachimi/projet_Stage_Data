@@ -10,7 +10,7 @@ export const NewsletterForm = () => {
         <input
           type="text"
           className="form_style"
-          placeholder="Enter Your Email Address"
+          placeholder="Votre adresse email"
           name="email"
         />
         <button type="submit">
@@ -20,7 +20,7 @@ export const NewsletterForm = () => {
       <div className="form-group check-box mb-0">
         <input type="checkbox" id="term" />
         <label htmlFor="term">
-          I agree to the <Link href="#">Privacy Policy</Link>.
+          J&apos;accepte la <Link href="#">politique de confidentialité</Link>.
         </label>
       </div>
     </form>

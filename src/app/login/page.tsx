@@ -4,9 +4,9 @@ import { AuthPageShell } from "@/components/auth/AuthPageShell";
 export default function LoginPage() {
   return (
     <AuthPageShell
-      eyebrow="Secure Access"
-      title="Return to your intelligence cockpit"
-      description="Sign in to review gathered offers, continue natural language queries, and keep your workspace history organized."
+      eyebrow="AlgoJob AI"
+      title="Connexion à votre Espace"
+      description="Accédez à la solution de Data Gathering intelligente AlgoJob AI pour collecter et traiter les offres d'emploi pertinentes en temps réel grâce à notre chatbot IA."
     >
       <AuthForm mode="login" />
     </AuthPageShell>

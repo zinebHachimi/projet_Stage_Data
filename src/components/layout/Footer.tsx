@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { NewsletterForm } from "@/components/ui/NewsletterForm";
 
 export const Footer = () => {
   return (
@@ -22,8 +23,7 @@ export const Footer = () => {
                   </figure>
                 </Link>
                 <p className="text-size-16 text">
-                  We create intelligent, scalable AI solutions that help
-                  businesses work smarter, move faster, and achieve more.
+                  Nous créons des solutions d&apos;intelligence artificielle intelligentes et scalables pour la collecte et le traitement de vos données d&apos;offres d&apos;emploi.
                 </p>
                 <ul className="list-unstyled mb-0 social-icons">
                   <li>
@@ -67,7 +67,7 @@ export const Footer = () => {
                   <li>
                     <i className="fa-solid fa-arrow-right"></i>
                     <Link href="/about" className="text-decoration-none">
-                      About
+                      À Propos
                     </Link>
                   </li>
                   <li>
@@ -79,13 +79,13 @@ export const Footer = () => {
                   <li>
                     <i className="fa-solid fa-arrow-right"></i>
                     <Link href="#" className="text-decoration-none">
-                      Faq
+                      FAQ
                     </Link>
                   </li>
                   <li>
                     <i className="fa-solid fa-arrow-right"></i>
                     <Link href="#" className="text-decoration-none">
-                      Pricing
+                      Tarifs
                     </Link>
                   </li>
                 </ul>
@@ -94,7 +94,7 @@ export const Footer = () => {
 
             <div className="col-xl-3 col-lg-3 col-md-4 col-sm-6 col-7">
               <div className="icon">
-                <h4 className="heading">Contact Info</h4>
+                <h4 className="heading">Contact</h4>
                 <ul className="list-unstyled mb-0">
                   <li className="text">
                     <i className="fa-solid fa-phone-volume"></i>
@@ -104,8 +104,8 @@ export const Footer = () => {
                   </li>
                   <li className="text">
                     <i className="fa-solid fa-envelope"></i>
-                    <a href="mailto:info@chatnex.com" className="text-decoration-none">
-                      info@chatnex.com
+                    <a href="mailto:contact@algojob.ai" className="text-decoration-none">
+                      contact@algojob.ai
                     </a>
                   </li>
                   <li className="text">
@@ -125,33 +125,14 @@ export const Footer = () => {
 
             <div className="col-xl-4 col-lg-4 col-md-5 col-sm-12 col-12">
               <div className="email-form">
-                <h4 className="heading">Newsletter Signup</h4>
-                <form onSubmit={(e) => e.preventDefault()}>
-                  <div className="form-group position-relative mb-0">
-                    <input
-                      type="text"
-                      className="form_style"
-                      placeholder="Enter Your Email Address"
-                      name="email"
-                    />
-                    <button type="submit">
-                      <i className="send fa-sharp fa-solid fa-paper-plane"></i>
-                    </button>
-                  </div>
-                  <div className="form-group check-box mb-0">
-                    <input type="checkbox" id="term" />
-                    <label htmlFor="term">
-                      I agree to the{" "}
-                      <Link href="#">Privacy Policy</Link>.
-                    </label>
-                  </div>
-                </form>
+                <h4 className="heading">Newsletter</h4>
+                <NewsletterForm />
               </div>
             </div>
           </div>
         </div>
         <div className="copyright">
-          <p className="mb-0">Copyright © 2025 Aivio. All Rights Reserved.</p>
+          <p className="mb-0">Copyright © 2026 AlgoJob AI. Tous droits réservés.</p>
         </div>
       </div>
     </section>

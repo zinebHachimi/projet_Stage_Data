@@ -5,7 +5,9 @@ export type AuthRequest = {
   name?: string;
   email?: string;
   password?: string;
+  confirmPassword?: string;
 };
+
 
 export type PublicUser = {
   id: string;

@@ -1,6 +1,8 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { verifySession } from "@/features/auth/session";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/Button";
@@ -8,11 +10,16 @@ import { RobotBannerAnimation } from "@/components/ui/RobotBannerAnimation";
 import { TestimonialCarousel } from "@/components/ui/TestimonialCarousel";
 import { FaqAccordion } from "@/components/ui/FaqAccordion";
 
-export default function Home() {
+export default async function Home() {
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("agentic_session")?.value;
+  const session = sessionToken ? await verifySession(sessionToken) : null;
+  const user = session ? { name: session.name, email: session.email } : null;
+
   return (
     <>
       {/* HEADER SECTION */}
-      <Header />
+      <Header user={user} />
 
       {/* BANNER SECTION */}
       <section className="float-left w-100 banner-con position-relative main-box">
@@ -22,29 +29,25 @@ export default function Home() {
               <div className="banner-content-con">
                 <ul className="list-unstyled p-0">
                   <li className="position-relative d-inline-block">
-                    <i className="fa-solid fa-circle-check"></i>Free 14-day trial
+                    <i className="fa-solid fa-circle-check"></i>Collecte en temps réel
                   </li>
                   <li className="position-relative d-inline-block">
-                    <i className="fa-solid fa-circle-check"></i>No credit card required
+                    <i className="fa-solid fa-circle-check"></i>Traitement intelligent par IA
                   </li>
                 </ul>
-                <h1>
-                  Boost Conversations <br />
-                  with Our Intelligent <br />
-                  <span className="d-inline-block font-weight-bold color-blue">
-                    Chatbot
-                  </span>{" "}
-                  Platform
+                <h1 style={{ fontSize: "38px", lineHeight: "1.3" }}>
+                  Solution de <span className="d-inline-block font-weight-bold color-blue">Data Gathering</span> <br />
+                  pour la collecte et le traitement des <br />
+                  offres d&apos;emploi basée sur l&apos;IA
                 </h1>
                 <p>
-                  Build human-like AI chatbots for websites, apps, and customer
-                  service in minutes.
+                  AlgoJob AI est un chatbot intelligent conçu pour automatiser la collecte, l&apos;analyse et la structuration des données d&apos;offres d&apos;emploi provenant de multiples sources en temps réel.
                 </p>
                 <Button href="/about" variant="primary" className="mr-2">
-                  Get Started
+                  Commencer
                 </Button>
                 <Button href="#" variant="secondary">
-                  Live Demo
+                  Démo en Direct
                 </Button>
               </div>
             </div>
@@ -75,8 +78,8 @@ export default function Home() {
         <div className="container wow fadeInUp" data-wow-duration="2s" data-wow-delay="0.2s">
           <div className="client-logo-inner d-flex align-items-center justify-content-between">
             <p className="wow fadeInLeft mb-0" data-wow-duration="2s" data-wow-delay="0.2s">
-              Trusted by <br />
-              10,000+ Businesses Globally:
+              Approuvé par <br />
+              +10 000 Entreprises :
             </p>
             <div
               className="logos-con d-flex align-items-center justify-content-between wow fadeIn"
@@ -152,10 +155,10 @@ export default function Home() {
               data-wow-duration="2s"
               data-wow-delay="0.2s"
             >
-              Amazing Features
+              Fonctionnalités Clés
             </span>
             <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.4s">
-              AI That Understands, Learns <br />& Engages
+              Une IA qui collecte, structure <br />& qualifie les données d&apos;emploi
             </h2>
           </div>
 
@@ -167,10 +170,9 @@ export default function Home() {
               data-wow-delay="0.5s"
             >
               <div className="feature-box position-relative all_boxes">
-                <h4>Conversational AI</h4>
+                <h4>Chatbot IA Intuitif</h4>
                 <p className="mb-0">
-                  Respond intelligently with GPT-powered natural language
-                  understanding.
+                  Interrogez les offres d&apos;emploi collectées en langage naturel grâce à notre agent conversationnel.
                 </p>
                 <div className="position-absolute feature-icon1 wow fadeInUp" data-wow-duration="2s" data-wow-delay="0.6s">
                   <Image
@@ -211,10 +213,10 @@ export default function Home() {
               data-wow-delay="0.5s"
             >
               <div className="feature-box position-relative all_boxes bg-green">
-                <h4>Multi-Platform</h4>
+                <h4>Multi-Sources</h4>
                 <p className="mb-0">
-                  Integrate with websites, apps, Facebook, <br />
-                  WhatsApp & more.
+                  Collecte en continu depuis les sites d&apos;emploi, <br />
+                  les réseaux professionnels et API.
                 </p>
                 <div className="position-absolute feature-icon2 wow fadeInLeft" data-wow-duration="2s" data-wow-delay="0.8s">
                   <Image
@@ -282,10 +284,10 @@ export default function Home() {
               data-wow-delay="0.5s"
             >
               <div className="feature-box position-relative all_boxes">
-                <h4>Real-Time Analytics</h4>
+                <h4>Analyses Décisionnelles</h4>
                 <p className="mb-0">
-                  Monitor chatbot performance and <br />
-                  user behavior in real time.
+                  Suivez les tendances du marché et <br />
+                  les compétences demandées en temps réel.
                 </p>
                 <div className="position-absolute feature-icon6 wow fadeInUp" data-wow-duration="2s" data-wow-delay="0.6s">
                   <Image
@@ -375,47 +377,47 @@ export default function Home() {
                     data-wow-duration="2s"
                     data-wow-delay="0.5s"
                   >
-                    How it Works
+                    Fonctionnement
                   </span>
                   <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.6s">
-                    How Our Advanced <br />
-                    AI Chatbot Works
+                    Notre Processus de <br />
+                    Data Gathering par IA
                   </h2>
                 </div>
                 <ul className="list-unstyled p-0">
                   <li className="position-relative d-flex align-items-center">
                     <span className="d-block color-blue font-weight-700">01</span>
                     <div className="work-content-inner-con">
-                      <h5>Build with Ease</h5>
+                      <h5>Collecte Ciblée</h5>
                       <p className="mb-0">
-                        Build your chatbot using our intuitive drag-and-drop <br />
-                        interface — no coding needed.
+                        Notre robot parcourt le web pour collecter les offres d&apos;emploi <br />
+                        selon vos filtres et technologies requises.
                       </p>
                     </div>
                   </li>
                   <li className="position-relative d-flex align-items-center">
                     <span className="d-block color-blue font-weight-700">02</span>
                     <div className="work-content-inner-con">
-                      <h5>Train with Your Content</h5>
+                      <h5>Structuration par IA</h5>
                       <p className="mb-0">
-                        Train your AI using documents, FAQs, or URLs to create <br />
-                        accurate, personalized responses.
+                        L&apos;algorithme IA nettoie et structure les données extraites <br />
+                        (compétences, salaires, diplômes requis, expérience).
                       </p>
                     </div>
                   </li>
                   <li className="position-relative d-flex align-items-center">
                     <span className="d-block color-blue font-weight-700">03</span>
                     <div className="work-content-inner-con">
-                      <h5>Deploy Anywhere</h5>
+                      <h5>Consultation Interactive</h5>
                       <p className="mb-0">
-                        Launch on your website, mobile app, or messaging <br />
-                        platforms in just a few clicks.
+                        Interrogez le chatbot pour filtrer, analyser et <br />
+                        exporter les offres d&apos;emploi selon vos besoins.
                       </p>
                     </div>
                   </li>
                 </ul>
                 <Button href="/about" variant="primary">
-                  Get Started
+                  Commencer
                 </Button>
               </div>
             </div>
@@ -432,11 +434,11 @@ export default function Home() {
               data-wow-duration="2s"
               data-wow-delay="0.2s"
             >
-              Why Choose Us
+              Pourquoi Nous Choisir
             </span>
             <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.4s">
-              Unique Selling Points & Advantages <br />
-              of Our Service
+              Les Avantages Clés de Notre Solution <br />
+              de Recrutement & Data Gathering
             </h2>
           </div>
           <div className="choose-outer-con wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.5s">
@@ -450,10 +452,9 @@ export default function Home() {
                   className="img-fluid"
                 />
               </figure>
-              <h6>Tailored Solutions</h6>
+              <h6>Filtres Sur-Mesure</h6>
               <p className="mb-0">
-                We offer customized services designed to meet the specific
-                needs...
+                Nous adaptons la collecte selon vos critères précis de compétences...
               </p>
             </div>
             <div className="choose-box">
@@ -466,10 +467,9 @@ export default function Home() {
                   className="img-fluid"
                 />
               </figure>
-              <h6>Customer Support</h6>
+              <h6>Support Technique</h6>
               <p className="mb-0">
-                Our dedicated support team is available 24/7, providing
-                assistance...
+                Une équipe d&apos;experts à votre écoute pour optimiser votre ciblage...
               </p>
             </div>
             <div className="choose-box">
@@ -482,9 +482,9 @@ export default function Home() {
                   className="img-fluid"
                 />
               </figure>
-              <h6>Affordable Pricing</h6>
+              <h6>Tarifs Compétitifs</h6>
               <p className="mb-0">
-                Competitive rates with transparent pricing—no hidden fees...
+                Des offres transparentes adaptées au volume de données collectées...
               </p>
             </div>
             <div className="choose-box">
@@ -497,10 +497,9 @@ export default function Home() {
                   className="img-fluid"
                 />
               </figure>
-              <h6>Scalable Solutions</h6>
+              <h6>Solution Scalable</h6>
               <p className="mb-0">
-                Our services grow with your business, allowing you to scale
-                up...
+                Notre infrastructure s&apos;adapte à l&apos;augmentation de vos volumes de données...
               </p>
             </div>
             <div className="choose-box">
@@ -513,15 +512,15 @@ export default function Home() {
                   className="img-fluid"
                 />
               </figure>
-              <h6>Expert Team</h6>
+              <h6>Équipe d&apos;Experts</h6>
               <p className="mb-0">
-                Our experienced professionals bring deep industry knowledge...
+                Des ingénieurs spécialisés en IA pour garantir des données fiables...
               </p>
             </div>
           </div>
           <div className="float-left w-100 m-auto text-center wow fadeInUp" data-wow-duration="2s" data-wow-delay="0.4s">
             <Button href="/about" variant="primary">
-              Get Started
+              Commencer
             </Button>
           </div>
         </div>
@@ -536,10 +535,10 @@ export default function Home() {
               data-wow-duration="2s"
               data-wow-delay="0.4s"
             >
-              Pricing Plans
+              Plans Tarifaires
             </span>
             <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.5s">
-              Simple, Transparent Pricing for Every Business
+              Des prix simples et transparents pour chaque entreprise
             </h2>
           </div>
           <div className="row all_row wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.5s">
@@ -547,37 +546,37 @@ export default function Home() {
             <div className="col-lg-4 col-md-6 all_column">
               <div className="pricing-box w-100 all_boxes">
                 <div className="plan-content">
-                  <h3>Starter Plan</h3>
+                  <h3>Plan Initial</h3>
                   <p>
-                    Get started with our essential <br />
-                    chatbot features.
+                    Pour démarrer la collecte <br />
+                    sur quelques sources cibles.
                   </p>
                   <div className="generic-price d-inline-block">
-                    <span className="d-block starting-at">Starting at:</span>
+                    <span className="d-block starting-at">À partir de :</span>
                     <sup className="d-inline-block font-weight-normal">$</sup>
                     <span className="d-inline-block price-text font-weight-600">49</span>
                     <span className="d-inline-block per-month mb-0 position-relative font-weight-normal">
-                      /mo
+                      /mois
                     </span>
                   </div>
                 </div>
                 <div className="plan-listing">
                   <ul className="list-unstyled p-0">
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i>Basic chatbot functionality
+                      <i className="fa-solid fa-check"></i>Accès au chatbot conversationnel
                     </li>
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i>Limited to 1 website
+                      <i className="fa-solid fa-check"></i>Limité à 1 source d&apos;offres
                     </li>
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i>Upto 100 conversation/month
+                      <i className="fa-solid fa-check"></i>Jusqu&apos;à 100 offres collectées/mois
                     </li>
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i> Email support
+                      <i className="fa-solid fa-check"></i> Support par email
                     </li>
                   </ul>
                   <Button href="#" variant="primary" className="w-100 text-center">
-                    Get Started
+                    Commencer
                   </Button>
                 </div>
               </div>
@@ -587,37 +586,37 @@ export default function Home() {
             <div className="col-lg-4 col-md-6 all_column">
               <div className="pricing-box w-100 all_boxes">
                 <div className="plan-content">
-                  <h3>Pro Plan</h3>
+                  <h3>Plan Professionnel</h3>
                   <p>
-                    Best for growing businesses needing <br />
-                    advanced features and scale.
+                    Idéal pour les entreprises <br />
+                    ayant besoin d&apos;analyses avancées.
                   </p>
                   <div className="generic-price d-inline-block">
-                    <span className="d-block starting-at">Starting at:</span>
+                    <span className="d-block starting-at">À partir de :</span>
                     <sup className="d-inline-block font-weight-normal">$</sup>
                     <span className="d-inline-block price-text font-weight-600">79</span>
                     <span className="d-inline-block per-month mb-0 position-relative font-weight-normal">
-                      /mo
+                      /mois
                     </span>
                   </div>
                 </div>
                 <div className="plan-listing">
                   <ul className="list-unstyled p-0">
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i>Unlimited Conversations
+                      <i className="fa-solid fa-check"></i>Collecte multi-sources illimitée
                     </li>
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i>Customer Branding
+                      <i className="fa-solid fa-check"></i>Filtres de compétences avancés
                     </li>
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i>Multi-language support
+                      <i className="fa-solid fa-check"></i>Exports structurés (JSON/CSV)
                     </li>
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i> Analytics dashboard
+                      <i className="fa-solid fa-check"></i> Tableau de bord analytique complet
                     </li>
                   </ul>
                   <Button href="#" variant="primary" className="w-100 text-center">
-                    Get Started
+                    Commencer
                   </Button>
                 </div>
               </div>
@@ -627,36 +626,36 @@ export default function Home() {
             <div className="col-lg-4 col-md-6 all_column">
               <div className="pricing-box w-100 all_boxes">
                 <div className="plan-content">
-                  <h3>Enterprise Plan</h3>
+                  <h3>Plan Entreprise</h3>
                   <p>
-                    Designed for large-scale operations <br /> and custom AI solutions
+                    Conçu pour la collecte à grande <br /> échelle et les solutions IA sur-mesure.
                   </p>
                   <div className="generic-price d-inline-block">
-                    <span className="d-block starting-at">Starting at:</span>
+                    <span className="d-block starting-at">À partir de :</span>
                     <sup className="d-inline-block font-weight-normal">$</sup>
                     <span className="d-inline-block price-text font-weight-600">199</span>
                     <span className="d-inline-block per-month mb-0 position-relative font-weight-normal">
-                      /mo
+                      /mois
                     </span>
                   </div>
                 </div>
                 <div className="plan-listing">
                   <ul className="list-unstyled p-0">
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i>All Pro features
+                      <i className="fa-solid fa-check"></i>Toutes les fonctionnalités Pro
                     </li>
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i>Dedicated account Manager
+                      <i className="fa-solid fa-check"></i>Accès complet à l&apos;API de données
                     </li>
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i> API access & integrations
+                      <i className="fa-solid fa-check"></i>Modèles de classification personnalisés
                     </li>
                     <li className="position-relative">
-                      <i className="fa-solid fa-check"></i>SLA & priority support
+                      <i className="fa-solid fa-check"></i>SLA et support prioritaire
                     </li>
                   </ul>
                   <Button href="#" variant="primary" className="w-100 text-center">
-                    Get Started
+                    Commencer
                   </Button>
                 </div>
               </div>
@@ -674,11 +673,11 @@ export default function Home() {
               data-wow-duration="2s"
               data-wow-delay="0.2s"
             >
-              Testimonials
+              Témoignages
             </span>
             <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.4s">
-              Build Trust With Reviews <br />
-              Loved by Businesses Worldwide
+              Découvrez les retours de nos partenaires <br />
+              et recruteurs satisfaits
             </h2>
           </div>
           <div className="row position-relative wow fadeIn" data-wow-duration="2s" data-wow-delay="0.4s">
@@ -716,10 +715,10 @@ export default function Home() {
                   data-wow-duration="2s"
                   data-wow-delay="0.2s"
                 >
-                  Faq&apos;s
+                  Questions Fréquentes
                 </span>
                 <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.4s">
-                  Answers to Your Most Frequently Asked <span>Questions</span>
+                  Réponses à vos questions sur notre solution de <span>Data Gathering IA</span>
                 </h2>
               </div>
             </div>
@@ -756,21 +755,20 @@ export default function Home() {
                 data-wow-duration="2s"
                 data-wow-delay="0.2s"
               >
-                Experience Boost
+                Automatisez vos Processus
               </span>
               <h2 className="wow fadeInRight" data-wow-duration="2s" data-wow-delay="0.4s">
-                Ready to Supercharge <br />
-                Your Customer Experience?
+                Prêt à structurer votre collecte <br />
+                d&apos;offres d&apos;emploi grâce à l&apos;IA ?
               </h2>
               <p className="wow fadeInDown" data-wow-duration="2s" data-wow-delay="0.5s">
-                Start using our AI chatbot today to automate support, boost
-                engagement, and save time.
+                Commencez à utiliser notre solution de Data Gathering dès aujourd&apos;hui pour collecter, traiter et filtrer vos données d&apos;emploi à l&apos;aide de l&apos;intelligence artificielle.
               </p>
               <Button href="/about" variant="primary" className="mr-2">
-                Get Started
+                Commencer
               </Button>
               <Button href="#" variant="secondary">
-                Live Demo
+                Démo en Direct
               </Button>
             </div>
           </div>

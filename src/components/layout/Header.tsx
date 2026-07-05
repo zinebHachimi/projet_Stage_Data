@@ -1,22 +1,51 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 
-export const Header = () => {
+interface HeaderProps {
+  user?: {
+    name: string;
+    email: string;
+  } | null;
+}
+
+export const Header = ({ user = null }: HeaderProps) => {
   const pathname = usePathname();
   const [navbarCollapsed, setNavbarCollapsed] = useState(true);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [avatarDropdownOpen, setAvatarDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLLIElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setAvatarDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+      if (response.ok) {
+        window.location.href = "/login";
+      }
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
+  };
 
   const toggleNavbar = () => {
     setNavbarCollapsed(!navbarCollapsed);
-  };
-
-  const toggleDropdown = (name: string, e: React.MouseEvent) => {
-    e.preventDefault();
-    setActiveDropdown(activeDropdown === name ? null : name);
   };
 
   // Helper to determine if link is active
@@ -24,6 +53,15 @@ export const Header = () => {
     if (path === "/" && pathname === "/") return true;
     if (path !== "/" && pathname.startsWith(path)) return true;
     return false;
+  };
+
+  const getInitials = (name: string) => {
+    if (!name) return "C";
+    const parts = name.trim().split(/\s+/);
+    if (parts.length >= 2) {
+      return `${parts[0]?.[0] || ""}${parts[1]?.[0] || ""}`.toUpperCase();
+    }
+    return name.slice(0, 2).toUpperCase();
   };
 
   return (
@@ -55,88 +93,40 @@ export const Header = () => {
           </button>
           
           <div
-            className={`collapse navbar-collapse ${!navbarCollapsed ? "show" : ""}`}
+            className={`navbar-collapse custom-navbar-collapse ${!navbarCollapsed ? "show" : ""}`}
             id="navbarSupportedContent"
           >
-            <ul className="navbar-nav ml-auto">
+            <ul className="navbar-nav mx-auto">
               <li className="nav-item">
                 <Link
                   className={`nav-link p-0 ${isActive("/") ? "active" : ""}`}
                   href="/"
                 >
-                  Home
+                  Accueil
                 </Link>
               </li>
-
+              <li className="nav-item">
+                <Link
+                  className={`nav-link p-0 ${pathname === "#services" ? "active" : ""}`}
+                  href="#"
+                >
+                  Services
+                </Link>
+              </li>
               <li className="nav-item">
                 <Link
                   className={`nav-link p-0 ${isActive("/about") ? "active" : ""}`}
                   href="/about"
                 >
-                  About
+                  À Propos
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link p-0" href="#">
-                  Services
-                </Link>
-              </li>
-
-              <li className={`nav-item dropdown ${activeDropdown === "blog" ? "show" : ""}`}>
-                <a
-                  className="nav-link dropdown-toggle p-0"
+                <Link
+                  className={`nav-link p-0 ${pathname === "#contact" ? "active" : ""}`}
                   href="#"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded={activeDropdown === "blog"}
-                  onClick={(e) => toggleDropdown("blog", e)}
                 >
-                  Blog
-                </a>
-                <div className={`dropdown-menu ${activeDropdown === "blog" ? "show" : ""}`}>
-                  <Link className="dropdown-item" href="#">Blog</Link>
-                  <Link className="dropdown-item" href="#">Load More</Link>
-                  <Link className="dropdown-item" href="#">Single Blog</Link>
-                  <Link className="dropdown-item" href="#">One Column</Link>
-                  <Link className="dropdown-item" href="#">Two Column</Link>
-                  <Link className="dropdown-item" href="#">Three Column</Link>
-                  <Link className="dropdown-item" href="#">Three Column Sidebar</Link>
-                  <Link className="dropdown-item" href="#">Four Column</Link>
-                  <Link className="dropdown-item" href="#">Six Column</Link>
-                </div>
-              </li>
-              <li className={`nav-item dropdown ${activeDropdown === "pages" ? "show" : ""}`}>
-                <a
-                  className="nav-link dropdown-toggle p-0"
-                  href="#"
-                  role="button"
-                  aria-haspopup="true"
-                  aria-expanded={activeDropdown === "pages"}
-                  onClick={(e) => toggleDropdown("pages", e)}
-                >
-                  Pages
-                </a>
-                <div className={`dropdown-menu ${activeDropdown === "pages" ? "show" : ""}`}>
-                  <Link className="dropdown-item" href="/about">About</Link>
-                  <Link className="dropdown-item" href="#">Contact</Link>
-                  <Link className="dropdown-item" href="#">Services</Link>
-                  <Link className="dropdown-item" href="#">Faq&apos;s</Link>
-                  <Link className="dropdown-item" href="#">Pricing</Link>
-                  <Link className="dropdown-item" href="#">Team</Link>
-                  <Link className="dropdown-item" href="#">404</Link>
-                  <Link className="dropdown-item" href="#">Coming Soon</Link>
-                  <Link className="dropdown-item" href="#">Testimonial</Link>
-                  <Link className="dropdown-item" href="#">Privacy Policy</Link>
-                </div>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link p-0" href="#">
-                  Pricing
-                </Link>
-              </li>
-              <li className="nav-item free-trial">
-                <Link className="nav-link font-weight-700" href="#">
-                  Try Free Trial
+                  Contact
                 </Link>
               </li>
             </ul>
@@ -144,24 +134,91 @@ export const Header = () => {
           
           <div className="header-contact">
             <ul className="list-unstyled mb-0 d-flex align-items-center">
-              <li className="d-inline-block" style={{ marginRight: "22px" }}>
-                <Link 
-                  href="/login" 
-                  className="nav-link p-0 font-weight-700 text-decoration-none"
-                  style={{
-                    color: "var(--e-global-color-primary)",
-                    fontSize: "16px",
-                    transition: "all 0.3s ease-in-out"
-                  }}
-                >
-                  Login
-                </Link>
-              </li>
-              <li className="d-inline-block">
-                <Link href="#" className="contact-btn d-inline-block">
-                  Contact Us
-                </Link>
-              </li>
+              {user ? (
+                <li className="d-inline-block position-relative" ref={dropdownRef}>
+                  <button
+                    onClick={() => setAvatarDropdownOpen(!avatarDropdownOpen)}
+                    className="border-0 bg-transparent p-0 d-flex align-items-center justify-content-center cursor-pointer"
+                    style={{ outline: "none" }}
+                  >
+                    <div
+                      className="d-flex align-items-center justify-content-center text-white font-weight-700 rounded-circle"
+                      style={{
+                        width: "45px",
+                        height: "45px",
+                        background: "linear-gradient(135deg, #155e75 0%, #007bff 100%)",
+                        boxShadow: "0 4px 10px rgba(0, 123, 255, 0.3)",
+                        border: "2px solid #ffffff",
+                        fontSize: "14px",
+                        transition: "all 0.3s ease"
+                      }}
+                    >
+                      {getInitials(user.name)}
+                    </div>
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {avatarDropdownOpen && (
+                    <div
+                      className="position-absolute dropdown-menu show"
+                      style={{
+                        right: 0,
+                        top: "55px",
+                        minWidth: "220px",
+                        backgroundColor: "#ffffff",
+                        borderRadius: "16px",
+                        border: "1px solid rgba(0, 0, 0, 0.08)",
+                        boxShadow: "0 10px 30px rgba(0, 0, 0, 0.15)",
+                        padding: "15px",
+                        zIndex: 1000,
+                        textAlign: "left"
+                      }}
+                    >
+                      <div className="mb-2 pb-2 border-bottom">
+                        <h6 className="font-weight-bold text-dark mb-1" style={{ fontSize: "14px" }}>
+                          {user.name || "Candidat"}
+                        </h6>
+                        <span className="text-muted d-block text-truncate" style={{ fontSize: "12px" }}>
+                          {user.email}
+                        </span>
+                      </div>
+                      <Link
+                        href="/"
+                        className="dropdown-item py-2 px-1 text-dark text-decoration-none d-block rounded-2"
+                        style={{ fontSize: "13px" }}
+                        onClick={() => setAvatarDropdownOpen(false)}
+                      >
+                        <i className="fa-solid fa-house mr-2 text-primary"></i> Mon Espace
+                      </Link>
+                      <Link
+                        href="/about"
+                        className="dropdown-item py-2 px-1 text-dark text-decoration-none d-block rounded-2"
+                        style={{ fontSize: "13px" }}
+                        onClick={() => setAvatarDropdownOpen(false)}
+                      >
+                        <i className="fa-solid fa-circle-info mr-2 text-primary"></i> À Propos
+                      </Link>
+                      <div className="dropdown-divider my-2"></div>
+                      <button
+                        onClick={() => {
+                          setAvatarDropdownOpen(false);
+                          handleLogout();
+                        }}
+                        className="dropdown-item py-2 px-1 text-danger border-0 bg-transparent text-left w-100 rounded-2 cursor-pointer"
+                        style={{ fontSize: "13px", outline: "none" }}
+                      >
+                        <i className="fa-solid fa-right-from-bracket mr-2"></i> Déconnexion
+                      </button>
+                    </div>
+                  )}
+                </li>
+              ) : (
+                <li className="d-inline-block">
+                  <Link href="/login" className="contact-btn d-inline-block text-decoration-none font-weight-700">
+                    Se Connecter
+                  </Link>
+                </li>
+              )}
             </ul>
           </div>
         </nav>
@@ -169,3 +226,4 @@ export const Header = () => {
     </header>
   );
 };
+

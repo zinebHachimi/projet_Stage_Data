@@ -6,26 +6,26 @@ const faqs = [
   {
     id: "collapseOne",
     headingId: "headingOne",
-    question: "What types of businesses can benefit from your AI solutions?",
-    answer: "Very easy! Our solutions are built with flexibility in mind and offer seamless integration with most major platforms and CRMs. Our support team will guide you through the process to ensure a smooth setup.",
+    question: "Comment la solution d'IA collecte-t-elle les offres d'emploi ?",
+    answer: "Notre solution de Data Gathering explore automatiquement et en temps réel de multiples plateformes d'emploi, réseaux professionnels et sites de recrutement partenaires pour en extraire les offres les plus pertinentes.",
   },
   {
     id: "collapseTwo",
     headingId: "headingTwo",
-    question: "How easy is it to integrate your AI into our existing systems?",
-    answer: "Very easy! Our solutions are built with flexibility in mind and offer seamless integration with most major platforms and CRMs. Our support team will guide you through the process to ensure a smooth setup.",
+    question: "Comment les données d'emploi sont-elles traitées et structurées ?",
+    answer: "Grâce à des modèles avancés d'IA et de NLP, notre solution extrait et normalise automatiquement les données clés : intitulés de poste, compétences requises, salaire proposé, type de contrat, localisation et niveau d'expérience.",
   },
   {
     id: "collapseThree",
     headingId: "headingThree",
-    question: "Do I need technical experience to use your platform?",
-    answer: "Very easy! Our solutions are built with flexibility in mind and offer seamless integration with most major platforms and CRMs. Our support team will guide you through the process to ensure a smooth setup.",
+    question: "Faut-il des compétences techniques pour configurer la collecte ?",
+    answer: "Pas du tout ! L'outil propose une interface simple et intuitive pour cibler les offres. Vous pouvez interroger le chatbot directement en français standard pour lui demander des données précises.",
   },
   {
     id: "collapseFour",
     headingId: "headingFour",
-    question: "Is my data secure with your AI solutions?",
-    answer: "Very easy! Our solutions are built with flexibility in mind and offer seamless integration with most major platforms and CRMs. Our support team will guide you through the process to ensure a smooth setup.",
+    question: "La solution s'adapte-t-elle à des volumes de données importants ?",
+    answer: "Oui, notre infrastructure de data gathering est scalable. Elle est conçue pour collecter et traiter des milliers d'offres chaque jour sans perte de performance, assurant une veille technologique et métier continue.",
   },
 ];
 

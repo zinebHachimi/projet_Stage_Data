@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       );
     }
 
-    return createSessionResponse(result.user);
+    return await createSessionResponse(result.user);
   } catch (error) {
     console.error("Authentication error", error);
 
