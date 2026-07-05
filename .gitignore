@@ -2,6 +2,12 @@
 node_modules/
 jspm_packages/
 
+# Next.js build output
+.next/
+out/
+dist/
+tsconfig.tsbuildinfo
+
 # Logs
 logs
 *.log
@@ -23,3 +29,5 @@ lerna-debug.log*
 # OS metadata
 .DS_Store
 Thumbs.db
+
+/assets/
