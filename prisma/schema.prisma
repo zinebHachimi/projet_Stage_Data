@@ -31,6 +31,19 @@ enum ContractType {
   UNKNOWN
 }
 
+enum KanbanPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum ErrorSeverity {
+  INFO
+  WARNING
+  ERROR
+  CRITICAL
+}
+
 model User {
   id             String         @id @default(auto()) @map("_id") @db.ObjectId
   email          String         @unique
@@ -40,6 +53,11 @@ model User {
   workspaceSlug  String         @default("default")
   queryHistories QueryHistory[]
   jobOffers      JobOffer[]
+  profile        AdminProfile?
+  chatMessages   ChatMessage[]
+  calendarEvents CalendarEvent[]
+  kanbanCards    KanbanCard[]
+  errorLogs      ErrorLog[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 }
@@ -89,4 +107,98 @@ model JobOffer {
   @@index([contract])
   @@index([skills])
   @@index([queryHistoryId])
+}
+
+model AdminProfile {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String   @unique @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String   @default("Admin")
+  phone       String?
+  location    String?
+  bio         String?
+  company     String?
+  website     String?
+  avatarUrl   String   @default("/admin-assets/images/profile/user-1.jpg")
+  addressLine String?
+  city        String?
+  country     String   @default("Morocco")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ChatMessage {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String?  @db.ObjectId
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  role      String
+  content   String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
+
+model CalendarEvent {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String?  @db.ObjectId
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  title       String
+  description String?
+  location    String?
+  startsAt    DateTime
+  endsAt      DateTime
+  color       String   @default("primary")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, startsAt])
+}
+
+model KanbanColumn {
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  position  Int
+  cards     KanbanCard[]
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([position])
+}
+
+model KanbanCard {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  columnId    String         @db.ObjectId
+  column      KanbanColumn   @relation(fields: [columnId], references: [id], onDelete: Cascade)
+  userId      String?        @db.ObjectId
+  user        User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  title       String
+  description String?
+  priority    KanbanPriority @default(MEDIUM)
+  imageUrl    String?
+  dueDate     DateTime?
+  position    Int
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  @@index([columnId, position])
+  @@index([userId])
+}
+
+model ErrorLog {
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String?       @db.ObjectId
+  user        User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  statusCode  Int
+  title       String
+  message     String
+  severity    ErrorSeverity @default(ERROR)
+  path        String?
+  stack       String?
+  resolvedAt  DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([severity, createdAt])
+  @@index([statusCode])
 }
