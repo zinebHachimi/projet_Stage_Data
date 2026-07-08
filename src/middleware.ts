@@ -24,14 +24,19 @@ export async function middleware(request: NextRequest) {
   const isAuthPage = pathname === "/login" || pathname === "/register";
   const isApiAuth = pathname.startsWith("/api/auth");
   const isApiRoute = pathname.startsWith("/api/");
+  const isAdminRoute = pathname.startsWith("/admin");
 
-  // If user is authenticated and tries to visit /login or /register, redirect to '/'
+  // If user is authenticated and tries to visit /login or /register, redirect to admin.
   if (isAuthenticated && isAuthPage) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/admin", request.url));
   }
 
   // If user is NOT authenticated:
   if (!isAuthenticated) {
+    if (isAdminRoute) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+
     // 1. If it's a private API route, return 401 Unauthorized
     if (isApiRoute && !isApiAuth) {
       return new NextResponse(

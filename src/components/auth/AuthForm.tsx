@@ -20,29 +20,18 @@ export function AuthForm({ mode }: AuthFormProps) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState(false);
-
-  // Form states
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Password strength check helper
   function checkPasswordStrength(pass: string): string | null {
-    if (pass.length < 8) {
-      return "Le mot de passe doit contenir au moins 8 caractères.";
-    }
-    if (!/[A-Z]/.test(pass)) {
-      return "Le mot de passe doit contenir au moins une lettre majuscule (A-Z).";
-    }
-    if (!/[a-z]/.test(pass)) {
-      return "Le mot de passe doit contenir au moins une lettre minuscule (a-z).";
-    }
-    if (!/\d/.test(pass)) {
-      return "Le mot de passe doit contenir au moins un chiffre (0-9).";
-    }
+    if (pass.length < 8) return "Le mot de passe doit contenir au moins 8 caracteres.";
+    if (!/[A-Z]/.test(pass)) return "Le mot de passe doit contenir au moins une lettre majuscule (A-Z).";
+    if (!/[a-z]/.test(pass)) return "Le mot de passe doit contenir au moins une lettre minuscule (a-z).";
+    if (!/\d/.test(pass)) return "Le mot de passe doit contenir au moins un chiffre (0-9).";
     if (!/[!@#$%^&*(),.?":{}|<>]/.test(pass)) {
-      return "Le mot de passe doit contenir au moins un caractère spécial (ex: !, @, #, $, etc.).";
+      return "Le mot de passe doit contenir au moins un caractere special (ex: !, @, #, $, etc.).";
     }
     return null;
   }
@@ -51,13 +40,12 @@ export function AuthForm({ mode }: AuthFormProps) {
     event.preventDefault();
     setError(null);
 
-    // Client-side validations
     if (mode === "register") {
       if (name.trim().length < 2) {
-        setError("Veuillez saisir votre nom complet (minimum 2 caractères).");
+        setError("Veuillez saisir votre nom complet (minimum 2 caracteres).");
         return;
       }
-      
+
       const strengthError = checkPasswordStrength(password);
       if (strengthError) {
         setError(strengthError);
@@ -72,32 +60,30 @@ export function AuthForm({ mode }: AuthFormProps) {
 
     setIsPending(true);
 
-    const payload = {
-      action: mode,
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      password,
-      confirmPassword: mode === "register" ? confirmPassword : undefined,
-    };
-
     try {
       const response = await fetch("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          action: mode,
+          name: name.trim(),
+          email: email.trim().toLowerCase(),
+          password,
+          confirmPassword: mode === "register" ? confirmPassword : undefined,
+        }),
       });
 
       if (!response.ok) {
-        const data = (await response.json()) as AuthErrorResponse;
+        const data = (await response.json().catch(() => ({}))) as AuthErrorResponse;
         setError(data.error?.message ?? "Une erreur d'authentification est survenue.");
         return;
       }
 
-      router.push("/");
+      router.replace("/admin");
       router.refresh();
     } catch (err) {
       console.error(err);
-      setError("Le service d'authentification est momentanément indisponible.");
+      setError("Le service d'authentification est momentanement indisponible.");
     } finally {
       setIsPending(false);
     }
@@ -106,9 +92,9 @@ export function AuthForm({ mode }: AuthFormProps) {
   return (
     <div className="w-100">
       <h3 className="font-weight-bold mb-4 text-center" style={{ color: "#0f172a", fontSize: "24px" }}>
-        {mode === "login" ? "Connexion à votre espace" : "Création de compte candidat"}
+        {mode === "login" ? "Connexion a votre espace" : "Creation de compte candidat"}
       </h3>
-      
+
       <form onSubmit={handleSubmit} className="d-flex flex-column" style={{ gap: "20px" }}>
         {mode === "register" ? (
           <div className="form-group text-left mb-0">
@@ -119,9 +105,10 @@ export function AuthForm({ mode }: AuthFormProps) {
               name="name"
               type="text"
               required
+              autoComplete="name"
               placeholder="Ex: Mohamed Alami"
               value={name}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(event) => setName(event.target.value)}
               className="auth-input"
             />
           </div>
@@ -135,9 +122,10 @@ export function AuthForm({ mode }: AuthFormProps) {
             name="email"
             type="email"
             required
+            autoComplete="email"
             placeholder="alami@recrutement.ma"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
             className="auth-input"
           />
         </div>
@@ -150,9 +138,10 @@ export function AuthForm({ mode }: AuthFormProps) {
             name="password"
             type="password"
             required
-            placeholder="••••••••"
+            autoComplete={mode === "login" ? "current-password" : "new-password"}
+            placeholder="********"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
             className="auth-input"
           />
         </div>
@@ -166,21 +155,25 @@ export function AuthForm({ mode }: AuthFormProps) {
               name="confirmPassword"
               type="password"
               required
-              placeholder="••••••••"
+              autoComplete="new-password"
+              placeholder="********"
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(event) => setConfirmPassword(event.target.value)}
               className="auth-input"
             />
           </div>
         ) : null}
 
         {error ? (
-          <div className="p-3 text-left border rounded-3" style={{
-            fontSize: "14px",
-            backgroundColor: "#fef2f2",
-            borderColor: "#fca5a5",
-            color: "#991b1b"
-          }}>
+          <div
+            className="p-3 text-left border rounded-3"
+            style={{
+              fontSize: "14px",
+              backgroundColor: "#fef2f2",
+              borderColor: "#fca5a5",
+              color: "#991b1b",
+            }}
+          >
             <i className="fa-solid fa-triangle-exclamation mr-2"></i> {error}
           </div>
         ) : null}
@@ -192,7 +185,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           className="w-100 text-center font-weight-700 py-3 mt-2 border-0"
           style={{
             borderRadius: "12px",
-            cursor: isPending ? "not-allowed" : "pointer"
+            cursor: isPending ? "not-allowed" : "pointer",
           }}
         >
           {isPending ? (
@@ -202,7 +195,7 @@ export function AuthForm({ mode }: AuthFormProps) {
           ) : mode === "login" ? (
             "Se Connecter"
           ) : (
-            "Créer mon Espace"
+            "Creer mon Espace"
           )}
         </Button>
       </form>
@@ -212,12 +205,12 @@ export function AuthForm({ mode }: AuthFormProps) {
           <p className="mb-0 text-muted" style={{ fontSize: "14px" }}>
             Pas encore inscrit ?{" "}
             <Link href="/register" className="font-weight-700 text-info text-decoration-none">
-              Créer un compte candidat
+              Creer un compte candidat
             </Link>
           </p>
         ) : (
           <p className="mb-0 text-muted" style={{ fontSize: "14px" }}>
-            Déjà un espace candidat ?{" "}
+            Deja un espace candidat ?{" "}
             <Link href="/login" className="font-weight-700 text-info text-decoration-none">
               Se connecter
             </Link>

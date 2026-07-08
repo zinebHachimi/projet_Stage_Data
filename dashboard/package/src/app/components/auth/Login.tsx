@@ -18,7 +18,7 @@ export const Login = () => {
               <FullLogo />
             </div>
             <p className='text-sm text-muted-foreground text-center mb-6'>
-              Welcome to Tailwind-Admin
+              Welcome to AlgoJob
             </p>
             <div>
               <div className='mb-2 block'>
@@ -66,7 +66,7 @@ export const Login = () => {
             </Button>
             <div className='flex items center gap-2 justify-center mt-6 flex-wrap'>
               <p className='text-base font-medium text-muted-foreground'>
-                New to TailwindAdmin?
+                New to AlgoJob?
               </p>
               <Link
                 href='/auth/register'

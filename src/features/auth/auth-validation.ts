@@ -33,7 +33,7 @@ export function getPasswordStrengthError(password: string): string | null {
     return "Password must contain at least one number (0-9).";
   }
   if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-    return "Password must contain at least one special character (e.g. !, @, #, $, %, etc.).";
+    return "Password must contain at least one special character (for example: !, @, #, $, %).";
   }
   return null;
 }

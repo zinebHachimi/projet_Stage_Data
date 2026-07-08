@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { CalendarDays, LayoutDashboard, MessageSquareText, PanelsTopLeft, UserCircle, AlertTriangle } from "lucide-react";
@@ -18,11 +17,15 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] text-[#1c2536]">
+    <div className="admin-dashboard min-h-screen bg-[#f8fafc] text-[#1c2536] antialiased">
       <aside className="fixed left-0 top-0 z-30 hidden h-screen w-[270px] border-r border-[#dfe5ef] bg-white xl:block">
-        <Link href="/admin" className="flex h-[78px] items-center gap-3 px-6">
-          <Image src="/admin-assets/images/logos/logo-icon.svg" width={36} height={36} alt="Tailwind Admin" />
-          <Image src="/admin-assets/images/logos/dark-logo.svg" width={144} height={32} alt="Tailwind Admin" />
+        <Link href="/admin" className="flex h-[78px] items-center gap-3 px-6" aria-label="AlgoJob admin dashboard">
+          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-[#5d87ff] text-base font-bold text-white">
+            AJ
+          </span>
+          <span className="text-[20px] font-bold tracking-normal text-[#1c2536]">
+            AlgoJob
+          </span>
         </Link>
         <nav className="px-6 py-4">
           <p className="mb-2 text-xs font-bold uppercase text-[#5a6a85bf]">Home</p>
@@ -45,7 +48,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
             })}
           </div>
           <div className="mt-9 rounded-lg bg-[#ecf2ff] p-6">
-            <h5 className="text-base font-semibold text-[#2a3547]">Admin workspace</h5>
+            <h5 className="text-base font-semibold text-[#2a3547]">AlgoJob workspace</h5>
             <p className="mt-1 text-sm text-[#5a6a85bf]">Connected to live application data.</p>
           </div>
         </nav>
@@ -53,7 +56,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       <div className="xl:pl-[270px]">
         <header className="sticky top-0 z-20 flex min-h-[72px] items-center justify-between bg-[#f8fafc]/95 px-6 py-4 backdrop-blur xl:px-10">
           <div>
-            <h1 className="text-lg font-semibold text-[#1c2536]">Admin Dashboard</h1>
+            <h1 className="text-[18px] font-semibold leading-tight text-[#1c2536]">Admin Dashboard</h1>
             <p className="text-sm text-[#5a6a85bf]">Single Next.js application</p>
           </div>
           <Link href="/" className="rounded-md bg-[#5d87ff] px-4 py-2 text-sm font-semibold text-white hover:bg-[#4b73df]">

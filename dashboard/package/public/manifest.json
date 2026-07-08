@@ -1,6 +1,6 @@
 {
-  "name": "Tailwind Admin Dashboard",
-  "short_name": "TailwindAdmin",
+  "name": "AlgoJob Admin Dashboard",
+  "short_name": "AlgoJob",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

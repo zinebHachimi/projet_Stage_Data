@@ -29,7 +29,7 @@ export async function POST(request: Request) {
     console.error("Authentication error", error);
 
     return jsonError(
-      "Authentication service is unavailable. Confirm MongoDB is running as replica set rs0.",
+      "Authentication service is unavailable. Please confirm the database connection is configured and reachable.",
       503,
       "SERVICE_UNAVAILABLE",
     );

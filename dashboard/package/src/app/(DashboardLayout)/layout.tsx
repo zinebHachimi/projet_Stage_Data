@@ -24,7 +24,7 @@ export default function Layout({
       </div>
       {/* vercel button */}
       <a
-        href='https://vercel.com/new/clone?repository-url=https://github.com/Tailwind-Admin/free-tailwind-admin-dashboard-template&root-directory=tailwind-admin-nextjs-free/package'
+        href='https://vercel.com/new'
         target='_blank'
         rel='noopener noreferrer'
         className='fixed bottom-4 right-4 z-50 flex items-center gap-2.5 px-5 py-2.5 bg-black text-white rounded-full shadow-2xl border border-border transition-all duration-200 hover:bg-black/90 hover:scale-105 active:scale-95'>

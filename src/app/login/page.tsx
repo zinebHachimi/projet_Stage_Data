@@ -5,8 +5,8 @@ export default function LoginPage() {
   return (
     <AuthPageShell
       eyebrow="AlgoJob AI"
-      title="Connexion à votre Espace"
-      description="Accédez à la solution de Data Gathering intelligente AlgoJob AI pour collecter et traiter les offres d'emploi pertinentes en temps réel grâce à notre chatbot IA."
+      title="Connexion a votre Espace"
+      description="Accedez a la solution de Data Gathering intelligente AlgoJob AI pour collecter et traiter les offres d'emploi pertinentes en temps reel grace a notre chatbot IA."
     >
       <AuthForm mode="login" />
     </AuthPageShell>

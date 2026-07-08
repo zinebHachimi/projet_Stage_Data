@@ -74,6 +74,70 @@ input {
   display: block;
 }
 
+/* Admin dashboard typography */
+.admin-dashboard {
+  font-family: var(--font-urbanist), Arial, Helvetica, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0;
+}
+
+.admin-dashboard :where(h1, h2, h3, h4, h5, h6) {
+  color: #1c2536;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+.admin-dashboard :where(h1) {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.admin-dashboard :where(h2) {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.admin-dashboard :where(h3) {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.admin-dashboard :where(h4, h5, h6) {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.admin-dashboard :where(p, li, td) {
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.admin-dashboard :where(label, input, select, textarea, button) {
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.admin-dashboard :where(input, select, textarea) {
+  font-weight: 500;
+}
+
+.admin-dashboard :where(button, a) {
+  letter-spacing: 0;
+}
+
+.admin-dashboard :where(table) {
+  font-size: 14px;
+}
+
+.admin-dashboard :where(th) {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
 /* Force Header Menu Items Display Always (Horizontal) */
 .custom-navbar-collapse {
   display: flex !important;
