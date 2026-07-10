@@ -2,7 +2,7 @@ import { ErrorSeverity, KanbanPriority } from "@prisma/client";
 import { ObjectId } from "mongodb";
 import { getMongoDb } from "@/lib/mongodb";
 import { prisma } from "@/lib/prisma";
-import { parseChatIntent } from "@/features/chat/intent";
+import { runChatPipeline } from "@/ai/chat";
 import { optionalString, requiredDate, requiredInt, requiredString } from "./admin-validation";
 
 const DEFAULT_COLUMNS = ["Backlog", "In Progress", "Review", "Done"];
@@ -56,16 +56,39 @@ export async function listChatMessages(userId?: string) {
 
 export async function createChatMessage(content: unknown, userId?: string) {
   const prompt = requiredString(content, "Message", 2000);
-  const intent = parseChatIntent(prompt);
+  
+  // Execute the AI Job Chatbot pipeline
+  const result = await runChatPipeline(prompt, userId, userId);
+
   const userMessage = await prisma.chatMessage.create({
-    data: { userId, role: "user", content: prompt, metadata: { intent } },
+    data: {
+      userId,
+      role: "user",
+      content: prompt,
+      metadata: {
+        intent: result.intent,
+        entities: result.entities as any,
+      },
+    },
   });
-  const reply = `I found a ${intent.role} request for ${intent.country}. You can launch a gather job from the public workflow, then monitor offers and query history here.`;
+
   const assistantMessage = await prisma.chatMessage.create({
-    data: { userId, role: "assistant", content: reply, metadata: { nextAction: "/api/gather", intent } },
+    data: {
+      userId,
+      role: "assistant",
+      content: result.reply,
+      metadata: {
+        intent: result.intent,
+        entities: result.entities as any,
+        jobs: result.jobs as any,
+        metrics: result.metrics as any,
+      },
+    },
   });
+
   return { userMessage, assistantMessage };
 }
+
 
 export async function listCalendarEvents(userId?: string) {
   return prisma.calendarEvent.findMany({

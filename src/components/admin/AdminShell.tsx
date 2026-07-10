@@ -2,16 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, LayoutDashboard, MessageSquareText, PanelsTopLeft, UserCircle, AlertTriangle } from "lucide-react";
+import { CalendarDays, LayoutDashboard, MessageSquareText, PanelsTopLeft, UserCircle, AlertTriangle, BarChart3 } from "lucide-react";
 
 const nav = [
   { href: "/admin", label: "Modern", icon: LayoutDashboard },
+  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/ai/chat", label: "AI Chat", icon: MessageSquareText },
   { href: "/admin/calendar", label: "Calendar", icon: CalendarDays },
   { href: "/admin/profile", label: "Profile", icon: UserCircle },
   { href: "/admin/kanban", label: "Kanban", icon: PanelsTopLeft },
   { href: "/admin/errors", label: "Errors", icon: AlertTriangle },
 ];
+
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
