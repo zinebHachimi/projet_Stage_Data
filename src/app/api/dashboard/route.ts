@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { dashboardMetrics } from "@/features/dashboard/dashboard-data";
+import { getDashboardMetrics } from "@/features/dashboard/dashboard-data";
 
 export async function GET() {
-  return NextResponse.json(dashboardMetrics);
+  return NextResponse.json(await getDashboardMetrics());
 }

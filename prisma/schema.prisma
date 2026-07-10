@@ -58,6 +58,7 @@ model User {
   calendarEvents CalendarEvent[]
   kanbanCards    KanbanCard[]
   errorLogs      ErrorLog[]
+  chatAnalytics  ChatAnalytics[]
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
 }
@@ -202,3 +203,26 @@ model ErrorLog {
   @@index([severity, createdAt])
   @@index([statusCode])
 }
+
+model ChatAnalytics {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  timestamp       DateTime @default(now())
+  conversationId  String?
+  userId          String?  @db.ObjectId
+  user            User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  searchQuery     String
+  normalizedQuery String?
+  location        String?
+  filters         Json?
+  responseTime    Float    // chatbot response latency in ms
+  backendLatency  Float?   // ever-jobs API request latency in ms
+  resultCount     Int      // number of job results returned
+  status          String   // "SUCCESS" | "FAILED" | "NO_RESULTS"
+  error           String?  // error message if failed
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([conversationId])
+  @@index([timestamp])
+}
+

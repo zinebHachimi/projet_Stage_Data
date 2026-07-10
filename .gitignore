@@ -31,3 +31,8 @@ lerna-debug.log*
 Thumbs.db
 
 /assets/
+
+# Environment variables
+.env
+.env.local
+.env.*.local

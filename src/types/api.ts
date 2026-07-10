@@ -26,12 +26,13 @@ export type GatheredOffer = {
   title: string;
   company: string;
   city: string;
-  contract: "CDI" | "HYBRID" | "REMOTE";
+  contract: "CDI" | "CDD" | "FREELANCE" | "INTERNSHIP" | "PART_TIME" | "REMOTE" | "HYBRID" | "UNKNOWN";
   skills: string[];
-  salaryMin: number;
-  salaryMax: number;
+  salaryMin: number | null;
+  salaryMax: number | null;
   aiConfidence: number;
   source: string;
+  sourceUrl?: string | null;
 };
 
 export type DashboardCityMetric = {
