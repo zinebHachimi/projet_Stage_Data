@@ -17,6 +17,7 @@ const nodeExternals = require('webpack-node-externals');
 module.exports = (options) => {
   return {
     ...options,
+    cache: false,
     externals: [
       nodeExternals({
         // Bundle (inline) all @ever-jobs/* workspace packages
