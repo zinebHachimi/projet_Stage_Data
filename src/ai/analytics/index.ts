@@ -1,5 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { ObjectId } from "mongodb";
+import { getMongoDb } from "@/lib/mongodb";
 
 export interface LogAnalyticsParams {
   conversationId?: string | null;
@@ -17,21 +19,33 @@ export interface LogAnalyticsParams {
 
 export async function logChatAnalytics(params: LogAnalyticsParams) {
   try {
-    return await prisma.chatAnalytics.create({
-      data: {
-        conversationId: params.conversationId || null,
-        userId: params.userId || null,
-        searchQuery: params.searchQuery,
-        normalizedQuery: params.normalizedQuery || null,
-        location: params.location || null,
-        filters: params.filters || undefined,
-        responseTime: params.responseTime,
-        backendLatency: params.backendLatency || null,
-        resultCount: params.resultCount,
-        status: params.status,
-        error: params.error || null,
-      },
-    });
+    const db = getMongoDb();
+    const chatAnalyticsCollection = db.collection("ChatAnalytics");
+
+    const validUserObjectId = params.userId && ObjectId.isValid(params.userId) ? new ObjectId(params.userId) : null;
+
+    const doc = {
+      timestamp: new Date(),
+      conversationId: params.conversationId || null,
+      userId: validUserObjectId,
+      searchQuery: params.searchQuery,
+      normalizedQuery: params.normalizedQuery || null,
+      location: params.location || null,
+      filters: params.filters || null,
+      responseTime: params.responseTime,
+      backendLatency: params.backendLatency || null,
+      resultCount: params.resultCount,
+      status: params.status,
+      error: params.error || null,
+      createdAt: new Date(),
+    };
+
+    const result = await chatAnalyticsCollection.insertOne(doc);
+    return {
+      id: result.insertedId.toHexString(),
+      ...doc,
+      userId: params.userId || null,
+    };
   } catch (error) {
     console.error("Failed to log chat analytics:", error);
   }

@@ -60,31 +60,49 @@ export async function createChatMessage(content: unknown, userId?: string) {
   // Execute the AI Job Chatbot pipeline
   const result = await runChatPipeline(prompt, userId, userId);
 
-  const userMessage = await prisma.chatMessage.create({
-    data: {
-      userId,
-      role: "user",
-      content: prompt,
-      metadata: {
-        intent: result.intent,
-        entities: result.entities as any,
-      },
-    },
-  });
+  const db = getMongoDb();
+  const chatMessagesCollection = db.collection("ChatMessage");
 
-  const assistantMessage = await prisma.chatMessage.create({
-    data: {
-      userId,
-      role: "assistant",
-      content: result.reply,
-      metadata: {
-        intent: result.intent,
-        entities: result.entities as any,
-        jobs: result.jobs as any,
-        metrics: result.metrics as any,
-      },
+  const validUserObjectId = userId && ObjectId.isValid(userId) ? new ObjectId(userId) : null;
+
+  const userMessageDoc = {
+    userId: validUserObjectId,
+    role: "user",
+    content: prompt,
+    metadata: {
+      intent: result.intent,
+      entities: result.entities as any,
     },
-  });
+    createdAt: new Date(),
+  };
+
+  const assistantMessageDoc = {
+    userId: validUserObjectId,
+    role: "assistant",
+    content: result.reply,
+    metadata: {
+      intent: result.intent,
+      entities: result.entities as any,
+      jobs: result.jobs as any,
+      metrics: result.metrics as any,
+    },
+    createdAt: new Date(),
+  };
+
+  const userResult = await chatMessagesCollection.insertOne(userMessageDoc);
+  const assistantResult = await chatMessagesCollection.insertOne(assistantMessageDoc);
+
+  const userMessage = {
+    id: userResult.insertedId.toHexString(),
+    ...userMessageDoc,
+    userId: userId || null,
+  };
+
+  const assistantMessage = {
+    id: assistantResult.insertedId.toHexString(),
+    ...assistantMessageDoc,
+    userId: userId || null,
+  };
 
   return { userMessage, assistantMessage };
 }

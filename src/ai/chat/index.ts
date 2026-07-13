@@ -93,8 +93,8 @@ export async function runChatPipeline(
     const totalTime = timer.getElapsedMs();
     const status = jobs.length > 0 ? "SUCCESS" : (intent === "search_job" || intent === "search_internship" ? "NO_RESULTS" : "SUCCESS");
 
-    // 7. Log to Analytics
-    await logChatAnalytics({
+    // 7. Log to Analytics (non-blocking)
+    logChatAnalytics({
       conversationId: conversationId || userId || "anonymous",
       userId,
       searchQuery: sanitizedMessage,
@@ -105,6 +105,8 @@ export async function runChatPipeline(
       backendLatency,
       resultCount: jobs.length,
       status,
+    }).catch((err) => {
+      console.error("Failed to log chat analytics in background:", err);
     });
 
     return {
@@ -125,8 +127,8 @@ export async function runChatPipeline(
     console.error("Chat Pipeline Error:", error);
     const errorMessage = error instanceof Error ? error.message : "An unexpected server error occurred.";
 
-    // Log failed transaction to analytics
-    await logChatAnalytics({
+    // Log failed transaction to analytics (non-blocking)
+    logChatAnalytics({
       conversationId: conversationId || userId || "anonymous",
       userId,
       searchQuery: sanitizedMessage,
@@ -134,6 +136,8 @@ export async function runChatPipeline(
       resultCount: 0,
       status: "FAILED",
       error: errorMessage,
+    }).catch((err) => {
+      console.error("Failed to log failed chat analytics in background:", err);
     });
 
     return {
