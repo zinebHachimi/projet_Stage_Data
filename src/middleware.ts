@@ -56,11 +56,12 @@ export async function middleware(request: NextRequest) {
     
     // VIEWER (Candidate/User)
     if (role === "VIEWER") {
-      // Allowed only: /admin/profile, /admin/kanban, /admin/calendar
-      const allowedPaths = ["/admin/profile", "/admin/kanban", "/admin/calendar"];
-      const isAllowed = allowedPaths.some(p => pathname === p || pathname.startsWith(p + "/"));
-      if (!isAllowed) {
-        return NextResponse.redirect(new URL("/admin/profile", request.url));
+      // Allowed: /admin, /admin/profile, /admin/kanban, /admin/calendar, /admin/ai/chat
+      // NOT allowed: /admin/errors, /admin/analytics (or any admin-only page)
+      const deniedPaths = ["/admin/errors", "/admin/analytics"];
+      const isDenied = deniedPaths.some(p => pathname === p || pathname.startsWith(p + "/"));
+      if (isDenied) {
+        return NextResponse.redirect(new URL("/admin", request.url));
       }
     }
     

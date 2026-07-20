@@ -183,22 +183,25 @@ export const Header = ({ user = null }: HeaderProps) => {
                           {user.email}
                         </span>
                       </div>
-                      <Link
-                        href={user?.role === "VIEWER" ? "/admin/profile" : "/admin"}
-                        className="dropdown-item py-2 px-1 text-dark text-decoration-none d-block rounded-2"
-                        style={{ fontSize: "13px" }}
-                        onClick={() => setAvatarDropdownOpen(false)}
-                      >
-                        <i className="fa-solid fa-gauge mr-2 text-primary"></i> Dashboard / Espace
-                      </Link>
-                      <Link
-                        href="/admin/profile"
-                        className="dropdown-item py-2 px-1 text-dark text-decoration-none d-block rounded-2"
-                        style={{ fontSize: "13px" }}
-                        onClick={() => setAvatarDropdownOpen(false)}
-                      >
-                        <i className="fa-solid fa-user mr-2 text-primary"></i> Profil / Paramètres
-                      </Link>
+                      {user?.role === "VIEWER" ? (
+                        <Link
+                          href="/admin"
+                          className="dropdown-item py-2 px-1 text-dark text-decoration-none d-block rounded-2"
+                          style={{ fontSize: "13px" }}
+                          onClick={() => setAvatarDropdownOpen(false)}
+                        >
+                          <i className="fa-solid fa-user mr-2 text-primary"></i> Mon Profil
+                        </Link>
+                      ) : (
+                        <Link
+                          href="/admin"
+                          className="dropdown-item py-2 px-1 text-dark text-decoration-none d-block rounded-2"
+                          style={{ fontSize: "13px" }}
+                          onClick={() => setAvatarDropdownOpen(false)}
+                        >
+                          <i className="fa-solid fa-gauge mr-2 text-primary"></i> Dashboard / Espace
+                        </Link>
+                      )}
                       <div className="dropdown-divider my-2"></div>
                       <button
                         onClick={() => {

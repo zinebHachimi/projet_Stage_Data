@@ -24,12 +24,12 @@ interface AdminUser {
 export function AdminShell({ children, user = null }: { children: React.ReactNode; user?: AdminUser | null }) {
   const pathname = usePathname();
   const role = user?.role || "VIEWER";
-  const homeLink = role === "VIEWER" ? "/admin/profile" : "/admin";
+  const homeLink = "/admin";
 
   const filteredNav = nav.filter(item => {
     if (role === "VIEWER") {
-      // Allowed only: profile, kanban, calendar
-      return ["/admin/profile", "/admin/kanban", "/admin/calendar"].includes(item.href);
+      // Allowed: dashboard, profile, kanban, calendar, ai/chat
+      return ["/admin", "/admin/profile", "/admin/kanban", "/admin/calendar", "/admin/ai/chat"].includes(item.href);
     } else if (role === "ANALYST") {
       // Allowed everything except errors and analytics
       return !["/admin/errors", "/admin/analytics"].includes(item.href);
@@ -39,6 +39,8 @@ export function AdminShell({ children, user = null }: { children: React.ReactNod
   }).map(item => {
     // Dynamic labeling
     if (role === "VIEWER") {
+      if (item.href === "/admin") return { ...item, label: "Mon Espace" };
+      if (item.href === "/admin/ai/chat") return { ...item, label: "Assistant AI" };
       if (item.href === "/admin/profile") return { ...item, label: "Mon profil" };
       if (item.href === "/admin/kanban") return { ...item, label: "Mes candidatures" };
       if (item.href === "/admin/calendar") return { ...item, label: "Mes documents" };

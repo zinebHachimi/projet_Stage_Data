@@ -27,6 +27,8 @@ import {
   Copy,
   RotateCw,
   X,
+  Briefcase,
+  FileText,
 } from "lucide-react";
 
 type JobCardType = {
@@ -107,6 +109,7 @@ export default function AdminChatPage() {
   const [likedMessages, setLikedMessages] = useState<Record<string, "like" | "dislike">>({});
   const [copiedMessageId, setCopiedMessageId] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [currentUser, setCurrentUser] = useState<{ name?: string | null; email: string; role: string } | null>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -117,6 +120,12 @@ export default function AdminChatPage() {
   async function load() {
     setLoading(true);
     try {
+      const userRes = await fetch("/api/auth/me");
+      const userData = await userRes.json();
+      if (userRes.ok && userData.user) {
+        setCurrentUser(userData.user);
+      }
+
       const res = await fetch("/api/admin/chat", { cache: "no-store" });
       const data: Message[] = await res.json();
       if (!res.ok) {
@@ -950,29 +959,35 @@ export default function AdminChatPage() {
               </div>
             </div>
           ) : activeMessages.length === 0 ? (
-            /* Welcome empty state */
-            <div className="flex h-full flex-col items-center justify-center text-center p-6 max-w-xl mx-auto">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#5d87ff] to-cyan-400 text-white shadow-md mb-6 animate-fade-in">
-                <Sparkles size={32} />
-              </div>
-              <h3 className="text-xl font-bold text-slate-800">Comment puis-je vous aider aujourd&apos;hui ?</h3>
-              <p className="text-xs text-[#5a6a85bf] mt-2 leading-relaxed">
-                Posez des questions sur les offres de stages, les emplois, le télétravail ou comparez les salaires dans différentes villes en langage naturel.
-              </p>
+            /* Welcome empty state (Gemini Style) */
+            <div className="flex h-full flex-col items-center justify-center text-center p-6 max-w-4xl mx-auto select-none animate-fade-in">
+              <h2 className="bg-gradient-to-r from-blue-600 via-indigo-600 to-pink-500 bg-clip-text text-transparent text-4xl md:text-5xl font-extrabold tracking-tight">
+                Bonjour, {currentUser?.name || currentUser?.email.split("@")[0] || "Candidat"}
+              </h2>
+              <h3 className="text-xl md:text-2xl font-bold text-slate-400 mt-2">
+                Que puis-je faire pour vous aujourd&apos;hui ?
+              </h3>
               
-              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
-                {QUICK_CHIPS.map((chip) => (
-                  <button
-                    key={chip}
-                    onClick={() => {
-                      setContent(chip);
-                      sendMessage(chip);
-                    }}
-                    className="p-3 text-left rounded-xl bg-white border border-[#dfe5ef] hover:border-[#5d87ff] text-slate-700 hover:text-[#5d87ff] text-xs font-medium transition shadow-sm hover:shadow"
-                  >
-                    {chip}
-                  </button>
-                ))}
+              <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full px-4">
+                {QUICK_CHIPS.map((chip, idx) => {
+                  const icons = [Search, Briefcase, FileText, Globe];
+                  const Icon = icons[idx % icons.length];
+                  return (
+                    <button
+                      key={chip}
+                      onClick={() => {
+                        setContent(chip);
+                        sendMessage(chip);
+                      }}
+                      className="flex flex-col justify-between p-5 h-36 rounded-2xl bg-white border border-[#dfe5ef] hover:border-[#5d87ff]/40 hover:bg-blue-50/20 text-slate-700 hover:text-slate-800 text-xs font-semibold text-left transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5 group cursor-pointer"
+                    >
+                      <span className="leading-relaxed">{chip}</span>
+                      <div className="h-8 w-8 rounded-lg bg-slate-50 group-hover:bg-blue-100/50 text-slate-400 group-hover:text-[#5d87ff] flex items-center justify-center transition-colors">
+                        <Icon size={16} />
+                      </div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
           ) : (
@@ -989,14 +1004,14 @@ export default function AdminChatPage() {
                     className={`flex flex-col group relative ${isUser ? "items-end" : "items-start"}`}
                   >
                     {/* Message bubble wrapper */}
-                    <div className="flex items-start gap-3 max-w-[85%] relative">
-                      {!isUser && (
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-tr from-[#5d87ff] to-cyan-400 text-white font-bold text-xs shadow-sm">
-                          AJ
+                    <div className="flex items-start gap-4 max-w-[85%] relative w-full">
+                      {!isUser ? (
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-blue-500 via-indigo-500 to-purple-500 text-white shadow-sm mt-0.5 animate-fade-in">
+                          <Sparkles size={14} />
                         </div>
-                      )}
+                      ) : null}
                       
-                      <div className="flex flex-col gap-1 relative">
+                      <div className="flex flex-col gap-1 relative flex-1 min-w-0">
                         {isEditing ? (
                           <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-md w-[400px] max-w-full">
                             <textarea
@@ -1022,10 +1037,10 @@ export default function AdminChatPage() {
                           </div>
                         ) : (
                           <div
-                            className={`rounded-2xl px-5 py-3.5 text-sm shadow-[0_1px_3px_rgba(0,0,0,0.04)] leading-relaxed select-text relative transition-all duration-200 break-words overflow-hidden ${
+                            className={`text-sm leading-relaxed select-text relative transition-all duration-200 break-words overflow-hidden ${
                               isUser
-                                ? "bg-gradient-to-r from-[#5d87ff] to-[#4b73df] text-white rounded-tr-none"
-                                : "bg-white text-slate-800 border border-[#dfe5ef] rounded-tl-none"
+                                ? "bg-slate-100 text-slate-800 px-5 py-3 rounded-3xl rounded-tr-none ml-auto max-w-[85%]"
+                                : "text-slate-800 px-0 py-1.5 bg-transparent border-none shadow-none"
                             }`}
                             style={{ wordBreak: "break-word" }}
                           >
@@ -1048,7 +1063,7 @@ export default function AdminChatPage() {
                         {!isEditing && (
                           <div
                             className={`absolute -top-9 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center bg-white border border-[#dfe5ef] rounded-lg shadow-md p-1 z-10 gap-0.5 ${
-                              isUser ? "right-0" : "left-0"
+                              isUser ? "right-0" : "left-12"
                             }`}
                           >
                             <button
@@ -1109,7 +1124,7 @@ export default function AdminChatPage() {
                         )}
 
                         {/* Timestamp & feedback status */}
-                        <div className="flex items-center gap-2 mt-1 px-1">
+                        <div className={`flex items-center gap-2 mt-1 ${isUser ? "justify-end px-1" : "pl-0"}`}>
                           <span className="text-[10px] text-slate-400">
                             {formatTimestamp(message.createdAt)}
                           </span>
@@ -1124,12 +1139,6 @@ export default function AdminChatPage() {
                           )}
                         </div>
                       </div>
-
-                      {isUser && (
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-200 text-slate-700 font-bold text-xs shadow-sm">
-                          U
-                        </div>
-                      )}
                     </div>
 
                     {/* Job Cards Layout inside log */}

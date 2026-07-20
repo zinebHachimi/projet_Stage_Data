@@ -193,6 +193,120 @@ export default function AdminHomePage() {
 
   const role = currentUser?.role || "ANALYST";
 
+  if (role === "VIEWER") {
+    return (
+      <div className="grid grid-cols-12 gap-6">
+        {/* Welcome Message Card */}
+        <AdminCard className="col-span-12 shadow-sm hover:shadow transition-shadow overflow-hidden bg-white relative">
+          <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-slate-800">
+                Bienvenue sur votre Espace Candidat, {currentUser?.name || currentUser?.email.split("@")[0]} !
+              </h2>
+              <p className="mt-1 text-sm text-[#5a6a85bf] font-medium">
+                Suivez l&apos;état de vos candidatures et planifiez vos entretiens avec l&apos;assistant IA.
+              </p>
+            </div>
+            <Image
+              src="/admin-assets/images/backgrounds/welcome-bg2.png"
+              width={160}
+              height={96}
+              alt=""
+              className="h-20 w-auto object-contain opacity-90"
+            />
+          </div>
+        </AdminCard>
+
+        {/* Left column: Kanban cards (candidatures) & AI Chatbot quick link */}
+        <div className="col-span-12 lg:col-span-8 space-y-6">
+          {/* Applications list */}
+          <AdminCard className="bg-white shadow-sm hover:shadow transition-shadow">
+            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-4">Mes Candidatures actives</h3>
+            <div className="space-y-4">
+              {(dbData?.cards ?? 0) > 0 ? (
+                <div className="p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-xl bg-[#ecf2ff] text-[#5d87ff] flex items-center justify-center">
+                      <FolderKanban size={20} />
+                    </div>
+                    <div>
+                      <h4 className="text-sm font-bold text-slate-800">Suivi Kanban</h4>
+                      <p className="text-xs text-slate-500">{dbData?.cards ?? 0} candidature(s) enregistrée(s) dans votre tableau.</p>
+                    </div>
+                  </div>
+                  <Link href="/admin/kanban" className="text-xs font-bold text-[#5d87ff] hover:underline text-decoration-none">
+                    Voir mon tableau &rarr;
+                  </Link>
+                </div>
+              ) : (
+                <div className="p-6 text-center border border-dashed border-slate-200 rounded-xl">
+                  <p className="text-xs text-slate-400 font-semibold">Aucune candidature enregistrée pour le moment.</p>
+                  <Link href="/admin/kanban" className="mt-3 inline-block text-xs font-bold text-[#5d87ff] hover:underline text-decoration-none">
+                    Ajouter ma première candidature &rarr;
+                  </Link>
+                </div>
+              )}
+            </div>
+          </AdminCard>
+
+          {/* Quick AI Chat Guide */}
+          <AdminCard className="bg-white shadow-sm hover:shadow transition-shadow">
+            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-4">Rechercher des offres avec l&apos;Assistant IA</h3>
+            <p className="text-xs text-[#5a6a85bf] leading-relaxed mb-4">
+              Notre assistant intelligent vous aide à trouver des offres ciblées en langage naturel. Posez des questions comme : 
+              <span className="italic font-semibold text-slate-700"> &quot;Je cherche des offres de Développeur React à Casablanca&quot;</span>.
+            </p>
+            <Link href="/admin/ai/chat" className="inline-flex items-center gap-2 rounded-xl bg-[#5d87ff] px-4 py-2.5 text-xs font-semibold text-white hover:bg-[#4b73df] transition shadow-sm text-decoration-none">
+              Lancer la discussion &rarr;
+            </Link>
+          </AdminCard>
+        </div>
+
+        {/* Right column: Personal info & Calendar summaries */}
+        <div className="col-span-12 lg:col-span-4 space-y-6">
+          {/* Personal Info summary */}
+          <AdminCard className="bg-white shadow-sm hover:shadow transition-shadow">
+            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-4">Informations Personnelles</h3>
+            <div className="space-y-3 text-xs font-semibold text-slate-600">
+              <div className="flex justify-between border-b border-slate-50 pb-2">
+                <span className="text-slate-400 font-semibold">Nom</span>
+                <span className="text-slate-800">{currentUser?.name || "Non renseigné"}</span>
+              </div>
+              <div className="flex justify-between border-b border-slate-50 pb-2">
+                <span className="text-slate-400 font-semibold">E-mail</span>
+                <span className="text-slate-800 text-truncate max-w-[180px]">{currentUser?.email}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-400 font-semibold">Rôle</span>
+                <span className="text-emerald-600">Candidat</span>
+              </div>
+            </div>
+            <Link href="/admin/profile" className="mt-4 block text-center rounded-xl border border-slate-200 py-2 text-xs font-bold text-slate-600 hover:bg-slate-50 transition text-decoration-none">
+              Mettre à jour mon profil
+            </Link>
+          </AdminCard>
+
+          {/* Calendar Events summary */}
+          <AdminCard className="bg-white shadow-sm hover:shadow transition-shadow">
+            <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wide mb-4">Mes documents & Entretiens</h3>
+            <div className="space-y-3">
+              {(dbData?.events ?? 0) > 0 ? (
+                <div className="p-3 rounded-lg bg-amber-50/50 border border-amber-100 flex justify-between items-center text-xs">
+                  <span className="font-bold text-amber-700">📅 {dbData?.events ?? 0} événement(s) planifié(s)</span>
+                  <Link href="/admin/calendar" className="text-[10px] font-bold text-[#5d87ff] hover:underline text-decoration-none">
+                    Voir
+                  </Link>
+                </div>
+              ) : (
+                <p className="text-xs text-slate-400 font-semibold py-2">Aucun entretien programmé.</p>
+              )}
+            </div>
+          </AdminCard>
+        </div>
+      </div>
+    );
+  }
+
   if (!dbData || (dbData.users === 0 && dbData.offers === 0)) {
     return (
       <div className="flex flex-col h-[400px] items-center justify-center bg-white rounded-2xl shadow-sm border border-[#dfe5ef] p-10 text-center">

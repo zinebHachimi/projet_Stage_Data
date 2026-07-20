@@ -79,12 +79,7 @@ export function AuthForm({ mode }: AuthFormProps) {
         return;
       }
 
-      const role = data.user?.role;
-      if (role === "VIEWER") {
-        router.replace("/admin/profile");
-      } else {
-        router.replace("/admin");
-      }
+      router.replace("/admin");
       router.refresh();
     } catch (err) {
       console.error(err);
