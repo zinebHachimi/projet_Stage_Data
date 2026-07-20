@@ -756,7 +756,7 @@ export function AIChatAssistant() {
 
   return (
     <div
-      className="flex gap-6 h-[calc(100vh-175px)] min-h-0 relative overflow-hidden bg-[#f8fafc]"
+      className="flex gap-6 h-[calc(100dvh-230px)] xl:h-[calc(100vh-210px)] min-h-0 relative overflow-hidden bg-[#f8fafc]"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -1186,15 +1186,31 @@ export function AIChatAssistant() {
                                   className="col-span-12 md:col-span-6 rounded-2xl border border-slate-200/80 bg-white p-4.5 shadow-sm hover:shadow transition-all duration-200 flex flex-col justify-between hover:border-blue-200"
                                 >
                                   <div>
-                                    {/* Header */}
-                                    <div className="flex items-start justify-between gap-2">
-                                      <div className="min-w-0">
-                                        <h4 className="text-sm font-bold text-slate-800 hover:text-blue-600 transition truncate" title={job.title}>
-                                          {job.title}
-                                        </h4>
-                                        <span className="text-xs font-semibold text-slate-400 block mt-0.5 truncate">
-                                          {job.company}
-                                        </span>
+                                    {/* Header with Company Logo Placeholder & Clickable Title */}
+                                    <div className="flex items-start justify-between gap-3">
+                                      <div className="flex items-start gap-3 min-w-0 flex-1">
+                                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-50 text-slate-600 border border-slate-100 font-bold text-sm uppercase select-none">
+                                          {job.company.slice(0, 2)}
+                                        </div>
+                                        <div className="min-w-0 flex-1">
+                                          <h4 className="text-sm font-extrabold text-slate-800 hover:text-blue-600 transition truncate" title={job.title}>
+                                            {job.sourceUrl ? (
+                                              <a
+                                                href={job.sourceUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="hover:underline text-slate-800 hover:text-blue-600 text-decoration-none"
+                                              >
+                                                {job.title}
+                                              </a>
+                                            ) : (
+                                              job.title
+                                            )}
+                                          </h4>
+                                          <span className="text-xs font-semibold text-slate-400 block mt-0.5 truncate">
+                                            {job.company}
+                                          </span>
+                                        </div>
                                       </div>
                                       <button
                                         type="button"

@@ -25,10 +25,14 @@ export function getOfflineRAGResponse(query: string, jobs: JobCard[]): string {
     const contractBadge = job.contract ? `\`${job.contract}\`` : "";
     const cityStr = job.city ? `📍 **Ville :** ${job.city}` : "";
 
-    text += `### ${index + 1}. 💼 **${job.title}**\n`;
+    const titleLink = job.sourceUrl ? `[${job.title}](${job.sourceUrl})` : job.title;
+    text += `### ${index + 1}. 💼 **${titleLink}**\n`;
     text += `🏢 *${job.company}* | ${cityStr} ${contractBadge}\n`;
     if (job.skills.length > 0) {
       text += `🛠️ **Compétences :** ${job.skills.slice(0, 5).join(", ")}\n`;
+    }
+    if (job.sourceUrl) {
+      text += `🔗 [Postuler ici](${job.sourceUrl})\n`;
     }
     if (salaryStr) {
       text += `${salaryStr}\n`;
