@@ -245,15 +245,31 @@ export function AIChatAssistant() {
     };
   }, []);
 
-  // Scroll to bottom on new messages (Direct offset calculation, prevents page jumps!)
+  // Scroll to bottom on new messages or when container size changes (e.g. keyboard opens/closes, card expands)
   useEffect(() => {
     const container = messageLogRef.current;
-    if (container) {
+    if (!container) return;
+
+    const handleScroll = () => {
       container.scrollTo({
         top: container.scrollHeight,
         behavior: "smooth"
       });
-    }
+    };
+
+    // Scroll after DOM paint
+    const timer = setTimeout(handleScroll, 80);
+
+    // Watch for size changes of the message log container
+    const resizeObserver = new ResizeObserver(() => {
+      setTimeout(handleScroll, 40);
+    });
+    resizeObserver.observe(container);
+
+    return () => {
+      clearTimeout(timer);
+      resizeObserver.disconnect();
+    };
   }, [messages, sending, activeConversationId]);
 
   // Auto-resize textarea
@@ -756,7 +772,7 @@ export function AIChatAssistant() {
 
   return (
     <div
-      className="flex gap-6 h-[calc(100dvh-230px)] xl:h-[calc(100vh-210px)] min-h-0 relative overflow-hidden bg-[#f8fafc]"
+      className="flex gap-6 h-[calc(100dvh-260px)] md:h-[calc(100dvh-240px)] xl:h-[calc(100vh-220px)] min-h-0 relative overflow-hidden bg-[#f8fafc]"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -770,16 +786,23 @@ export function AIChatAssistant() {
         .animate-fade-in {
           animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+        .chat-scroll {
+          scrollbar-width: auto;
+          scrollbar-color: #cbd5e1 #f8fafc;
+        }
         .chat-scroll::-webkit-scrollbar {
-          width: 6px;
-          height: 6px;
+          width: 8px;
+          height: 8px;
+          display: block !important;
         }
         .chat-scroll::-webkit-scrollbar-track {
-          background: transparent;
+          background: #f8fafc;
+          border-radius: 9999px;
         }
         .chat-scroll::-webkit-scrollbar-thumb {
           background: #cbd5e1;
           border-radius: 9999px;
+          border: 2px solid #f8fafc;
         }
         .chat-scroll::-webkit-scrollbar-thumb:hover {
           background: #94a3b8;
