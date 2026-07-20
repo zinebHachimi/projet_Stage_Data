@@ -237,11 +237,17 @@ export function AIChatAssistant() {
     void load();
   }, []);
 
-  // Prevent body scrolling while component is mounted
+  // Prevent body and html scrolling while component is mounted
   useEffect(() => {
+    const originalBodyOverflow = document.body.style.overflow;
+    const originalHtmlOverflow = document.documentElement.style.overflow;
+
     document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow = "hidden";
+
     return () => {
-      document.body.style.overflow = "";
+      document.body.style.overflow = originalBodyOverflow;
+      document.documentElement.style.overflow = originalHtmlOverflow;
     };
   }, []);
 
@@ -772,7 +778,7 @@ export function AIChatAssistant() {
 
   return (
     <div
-      className="flex gap-6 h-[calc(100dvh-260px)] md:h-[calc(100dvh-240px)] xl:h-[calc(100vh-220px)] min-h-0 relative overflow-hidden bg-[#f8fafc]"
+      className="flex gap-6 h-[calc(100dvh_-_260px)] md:h-[calc(100dvh_-_240px)] xl:h-[calc(100vh_-_220px)] min-h-0 relative overflow-hidden bg-[#f8fafc]"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
