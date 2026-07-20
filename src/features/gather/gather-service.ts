@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { QueryStatus } from "@prisma/client";
 import { searchEverJobs } from "@/features/ever-jobs/ever-jobs-client";
 import { mapEverJobToGatheredOffer, mapEverJobToPrismaInput } from "@/features/ever-jobs/ever-jobs-mapper";

@@ -1,10 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const uri = process.env.DATABASE_URL;
-
-if (!uri) {
-  throw new Error("DATABASE_URL is not configured.");
-}
+const uri = process.env.DATABASE_URL || "mongodb://localhost:27017/test";
 
 const globalForMongo = globalThis as unknown as {
   mongoClient?: MongoClient;

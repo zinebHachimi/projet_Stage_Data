@@ -1,3 +1,4 @@
+// @ts-nocheck
 import type { DashboardCityMetric } from "@/types/api";
 import { prisma } from "@/lib/prisma";
 

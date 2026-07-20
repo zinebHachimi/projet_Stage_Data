@@ -1,15 +1,7 @@
 import type { Metadata } from "next";
-import { Urbanist } from "next/font/google";
 import "./globals.css";
 import { BackToTopButton } from "@/components/ui/BackToTopButton";
 import { WowInitializer } from "@/components/ui/WowInitializer";
-
-const urbanist = Urbanist({
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  display: "swap",
-  variable: "--font-urbanist",
-});
 
 export const metadata: Metadata = {
   title: "AlgoJob AI | Plateforme de Data Gathering & Chatbot d'Offres d'Emploi",
@@ -22,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={urbanist.variable}>
+    <html lang="en">
       <head>
         {/* Font Awesome */}
         <link 

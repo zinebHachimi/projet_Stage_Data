@@ -107,8 +107,8 @@ export const Header = ({ user = null }: HeaderProps) => {
               </li>
               <li className="nav-item">
                 <Link
-                  className={`nav-link p-0 ${pathname === "#services" ? "active" : ""}`}
-                  href="#"
+                  className={`nav-link p-0 ${isActive("/services") ? "active" : ""}`}
+                  href="/services"
                 >
                   Services
                 </Link>
@@ -123,8 +123,8 @@ export const Header = ({ user = null }: HeaderProps) => {
               </li>
               <li className="nav-item">
                 <Link
-                  className={`nav-link p-0 ${pathname === "#contact" ? "active" : ""}`}
-                  href="#"
+                  className={`nav-link p-0 ${isActive("/contact") ? "active" : ""}`}
+                  href="/contact"
                 >
                   Contact
                 </Link>

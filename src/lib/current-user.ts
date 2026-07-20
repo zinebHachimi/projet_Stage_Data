@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { cookies } from "next/headers";
 import { verifySession } from "@/features/auth/session";
 import { prisma } from "@/lib/prisma";

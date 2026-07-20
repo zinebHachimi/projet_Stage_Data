@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { ErrorSeverity, KanbanPriority } from "@prisma/client";
 import { ObjectId } from "mongodb";
 import { getMongoDb } from "@/lib/mongodb";

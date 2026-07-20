@@ -72,7 +72,7 @@ export const Footer = () => {
                   </li>
                   <li>
                     <i className="fa-solid fa-arrow-right"></i>
-                    <Link href="#" className="text-decoration-none">
+                    <Link href="/services" className="text-decoration-none">
                       Services
                     </Link>
                   </li>
