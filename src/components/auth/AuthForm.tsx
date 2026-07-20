@@ -73,13 +73,18 @@ export function AuthForm({ mode }: AuthFormProps) {
         }),
       });
 
+      const data = await response.json().catch(() => ({}));
       if (!response.ok) {
-        const data = (await response.json().catch(() => ({}))) as AuthErrorResponse;
         setError(data.error?.message ?? "Une erreur d'authentification est survenue.");
         return;
       }
 
-      router.replace("/admin");
+      const role = data.user?.role;
+      if (role === "VIEWER") {
+        router.replace("/admin/profile");
+      } else {
+        router.replace("/admin");
+      }
       router.refresh();
     } catch (err) {
       console.error(err);
