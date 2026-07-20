@@ -11,7 +11,8 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "prisma:generate": "prisma generate"
+    "prisma:generate": "prisma generate",
+    "seed:accounts": "node scripts/create-test-accounts.js"
   },
   "dependencies": {
     "@iconify/react": "^4.1.1",

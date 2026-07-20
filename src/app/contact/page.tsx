@@ -12,7 +12,7 @@ export default async function ContactPage() {
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("agentic_session")?.value;
   const session = sessionToken ? await verifySession(sessionToken) : null;
-  const user = session ? { name: session.name, email: session.email } : null;
+  const user = session ? { name: session.name, email: session.email, role: session.role } : null;
 
   const contactInfos = [
     {

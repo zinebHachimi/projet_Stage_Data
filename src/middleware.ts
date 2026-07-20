@@ -26,8 +26,12 @@ export async function middleware(request: NextRequest) {
   const isApiRoute = pathname.startsWith("/api/");
   const isAdminRoute = pathname.startsWith("/admin");
 
-  // If user is authenticated and tries to visit /login or /register, redirect to admin.
+  // If user is authenticated and tries to visit /login or /register, redirect to appropriate home page.
   if (isAuthenticated && isAuthPage) {
+    const role = session?.role;
+    if (role === "VIEWER") {
+      return NextResponse.redirect(new URL("/admin/profile", request.url));
+    }
     return NextResponse.redirect(new URL("/admin", request.url));
   }
 
@@ -43,6 +47,32 @@ export async function middleware(request: NextRequest) {
         JSON.stringify({ error: { message: "Unauthorized. Please log in." } }),
         { status: 401, headers: { "Content-Type": "application/json" } }
       );
+    }
+  }
+
+  // If user IS authenticated, enforce RBAC:
+  if (isAuthenticated && isAdminRoute) {
+    const role = session?.role;
+    
+    // VIEWER (Candidate/User)
+    if (role === "VIEWER") {
+      // Allowed only: /admin/profile, /admin/kanban, /admin/calendar
+      const allowedPaths = ["/admin/profile", "/admin/kanban", "/admin/calendar"];
+      const isAllowed = allowedPaths.some(p => pathname === p || pathname.startsWith(p + "/"));
+      if (!isAllowed) {
+        return NextResponse.redirect(new URL("/admin/profile", request.url));
+      }
+    }
+    
+    // ANALYST (Recruiter/RH)
+    if (role === "ANALYST") {
+      // Allowed: /admin, /admin/profile, /admin/kanban, /admin/calendar, /admin/ai/chat
+      // NOT allowed: /admin/errors, /admin/analytics (or any admin-only page)
+      const deniedPaths = ["/admin/errors", "/admin/analytics"];
+      const isDenied = deniedPaths.some(p => pathname === p || pathname.startsWith(p + "/"));
+      if (isDenied) {
+        return NextResponse.redirect(new URL("/admin", request.url));
+      }
     }
   }
 

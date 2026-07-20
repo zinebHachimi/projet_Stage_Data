@@ -46,7 +46,7 @@ export async function authenticate(payload: ValidAuthPayload): Promise<AuthServi
       email: payload.email,
       name: payload.name,
       passwordHash: hashPassword(payload.password),
-      role: "ANALYST",
+      role: "VIEWER",
       workspaceSlug,
       createdAt: now,
       updatedAt: now,
@@ -56,7 +56,7 @@ export async function authenticate(payload: ValidAuthPayload): Promise<AuthServi
 
     return {
       ok: true,
-      user: { id: user._id.toHexString(), email: user.email, name: user.name ?? null },
+      user: { id: user._id.toHexString(), email: user.email, name: user.name ?? null, role: user.role ?? "VIEWER" },
     };
   }
 
@@ -68,8 +68,8 @@ export async function authenticate(payload: ValidAuthPayload): Promise<AuthServi
     return { ok: false, status: 401, message: "Invalid email or password." };
   }
 
-return {
+  return {
     ok: true,
-    user: { id: user._id.toHexString(), email: user.email, name: user.name ?? null },
+    user: { id: user._id.toHexString(), email: user.email, name: user.name ?? null, role: user.role ?? "VIEWER" },
   };
 }

@@ -195,7 +195,10 @@ export default function AdminChatPage() {
 
   // Scroll to bottom on new messages
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    const timer = setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }, 100);
+    return () => clearTimeout(timer);
   }, [messages, sending, activeConversationId]);
 
   // Auto-resize textarea
@@ -753,7 +756,7 @@ export default function AdminChatPage() {
 
   return (
     <div
-      className="flex gap-6 h-[calc(100vh-140px)] relative overflow-hidden bg-[#f8fafc]"
+      className="flex gap-6 h-[calc(100vh-210px)] min-h-0 relative overflow-hidden bg-[#f8fafc]"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -938,7 +941,7 @@ export default function AdminChatPage() {
         )}
 
         {/* Message Log */}
-        <div className="flex-1 overflow-y-auto bg-slate-50/50 p-6 space-y-6 chat-scroll">
+        <div className="flex-1 min-h-0 overflow-y-auto bg-slate-50/50 p-6 space-y-6 chat-scroll" style={{ minHeight: 0 }}>
           {loading ? (
             <div className="flex h-full items-center justify-center">
               <div className="text-center">
@@ -1019,11 +1022,12 @@ export default function AdminChatPage() {
                           </div>
                         ) : (
                           <div
-                            className={`rounded-2xl px-5 py-3.5 text-sm shadow-[0_1px_3px_rgba(0,0,0,0.04)] leading-relaxed select-text relative transition-all duration-200 ${
+                            className={`rounded-2xl px-5 py-3.5 text-sm shadow-[0_1px_3px_rgba(0,0,0,0.04)] leading-relaxed select-text relative transition-all duration-200 break-words overflow-hidden ${
                               isUser
                                 ? "bg-gradient-to-r from-[#5d87ff] to-[#4b73df] text-white rounded-tr-none"
                                 : "bg-white text-slate-800 border border-[#dfe5ef] rounded-tl-none"
                             }`}
+                            style={{ wordBreak: "break-word" }}
                           >
                             {isUser ? message.content : renderMarkdown(message.content)}
 

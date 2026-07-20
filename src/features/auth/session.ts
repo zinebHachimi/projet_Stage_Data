@@ -7,6 +7,7 @@ export type SessionPayload = {
   userId: string;
   email: string;
   name: string;
+  role: string;
   issuedAt: number;
 };
 
@@ -91,6 +92,7 @@ export async function createSessionResponse(user: PublicUser) {
     userId: user.id,
     email: user.email,
     name: user.name || "",
+    role: user.role,
     issuedAt: Date.now(),
   };
 

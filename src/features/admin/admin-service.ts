@@ -26,7 +26,7 @@ type AdminProfileDocument = {
 };
 
 export async function getDashboardOverview() {
-  const [users, offers, queries, recentQueries, recentOffers, errors, events, cards] = await Promise.all([
+  const [users, offers, queries, recentQueries, recentOffers, errors, events, cards, dbUsers, contracts] = await Promise.all([
     prisma.user.count(),
     prisma.jobOffer.count(),
     prisma.queryHistory.count(),
@@ -35,6 +35,13 @@ export async function getDashboardOverview() {
     prisma.errorLog.count({ where: { resolvedAt: null } }),
     prisma.calendarEvent.count({ where: { startsAt: { gte: new Date() } } }),
     prisma.kanbanCard.count(),
+    prisma.user.findMany({ orderBy: { createdAt: "desc" }, take: 5 }),
+    prisma.jobOffer.groupBy({
+      by: ["contract"],
+      _count: { contract: true },
+      orderBy: { _count: { contract: "desc" } },
+      take: 3,
+    }),
   ]);
 
   const byCity = await prisma.jobOffer.groupBy({
@@ -44,7 +51,31 @@ export async function getDashboardOverview() {
     take: 6,
   });
 
-  return { users, offers, queries, errors, events, cards, byCity, recentQueries, recentOffers };
+  return {
+    users,
+    offers,
+    queries,
+    errors,
+    events,
+    cards,
+    byCity,
+    recentQueries,
+    recentOffers,
+    contracts: contracts.map(c => ({
+      contract: c.contract,
+      count: c._count.contract,
+    })),
+    recentUsers: dbUsers.map(u => ({
+      id: u.id,
+      name: u.name || u.email.split("@")[0] || "Candidat",
+      email: u.email,
+      role: u.role === "ADMIN" ? "Administrateur" : u.role === "ANALYST" ? "Recruteur" : "Candidat",
+      rawRole: u.role,
+      status: "Actif",
+      initials: (u.name || u.email).substring(0, 2).toUpperCase(),
+      color: u.role === "ADMIN" ? "bg-red-100 text-red-800" : u.role === "ANALYST" ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800",
+    })),
+  };
 }
 
 export async function listChatMessages(userId?: string) {

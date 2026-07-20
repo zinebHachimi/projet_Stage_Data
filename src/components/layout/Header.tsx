@@ -9,6 +9,7 @@ interface HeaderProps {
   user?: {
     name: string;
     email: string;
+    role?: string;
   } | null;
 }
 
@@ -183,20 +184,20 @@ export const Header = ({ user = null }: HeaderProps) => {
                         </span>
                       </div>
                       <Link
-                        href="/"
+                        href={user?.role === "VIEWER" ? "/admin/profile" : "/admin"}
                         className="dropdown-item py-2 px-1 text-dark text-decoration-none d-block rounded-2"
                         style={{ fontSize: "13px" }}
                         onClick={() => setAvatarDropdownOpen(false)}
                       >
-                        <i className="fa-solid fa-house mr-2 text-primary"></i> Mon Espace
+                        <i className="fa-solid fa-gauge mr-2 text-primary"></i> Dashboard / Espace
                       </Link>
                       <Link
-                        href="/about"
+                        href="/admin/profile"
                         className="dropdown-item py-2 px-1 text-dark text-decoration-none d-block rounded-2"
                         style={{ fontSize: "13px" }}
                         onClick={() => setAvatarDropdownOpen(false)}
                       >
-                        <i className="fa-solid fa-circle-info mr-2 text-primary"></i> À Propos
+                        <i className="fa-solid fa-user mr-2 text-primary"></i> Profil / Paramètres
                       </Link>
                       <div className="dropdown-divider my-2"></div>
                       <button
