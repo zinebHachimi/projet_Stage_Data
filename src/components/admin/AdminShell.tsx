@@ -84,9 +84,8 @@ export function AdminShell({ children, user = null }: { children: React.ReactNod
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition ${
-                    active ? "bg-[#ecf2ff] text-[#5d87ff]" : "text-[#2a3547] hover:bg-[#ecf2ff] hover:text-[#5d87ff]"
-                  }`}
+                  className={`flex items-center gap-3 rounded-md px-4 py-3 text-sm font-medium transition ${active ? "bg-[#ecf2ff] text-[#5d87ff]" : "text-[#2a3547] hover:bg-[#ecf2ff] hover:text-[#5d87ff]"
+                    }`}
                 >
                   <Icon size={20} />
                   <span>{item.label}</span>
