@@ -40,7 +40,7 @@ export async function runChatPipeline(
 
     // 3. Entity Extraction
     const currentEntities = await extractEntities(sanitizedMessage, historyText);
-    
+
     // Merge new entities with previous context (memory retention)
     entities = mergeEntities(previousEntities, currentEntities);
 
@@ -48,7 +48,7 @@ export async function runChatPipeline(
     if (intent === "search_job" || intent === "search_internship") {
       // Build search query and parameters
       const searchParams = buildSearchParams(entities);
-      
+
       // Override/fine-tune search query depending on intent
       if (intent === "search_internship" && !searchParams.searchTerm.toLowerCase().includes("intern") && !searchParams.searchTerm.toLowerCase().includes("stage")) {
         searchParams.searchTerm = `${searchParams.searchTerm} Internship`;

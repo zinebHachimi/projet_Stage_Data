@@ -17,9 +17,8 @@ export function getOfflineRAGResponse(query: string, jobs: JobCard[]): string {
   jobs.forEach((job, index) => {
     const salaryStr =
       job.salaryMin || job.salaryMax
-        ? `💵 **Salaire :** ${job.salaryMin ? `${job.salaryMin}` : "—"} - ${
-            job.salaryMax ? `${job.salaryMax}` : "—"
-          } MAD/mois`
+        ? `💵 **Salaire :** ${job.salaryMin ? `${job.salaryMin}` : "—"} - ${job.salaryMax ? `${job.salaryMax}` : "—"
+        } MAD/mois`
         : "";
 
     const contractBadge = job.contract ? `\`${job.contract}\`` : "";

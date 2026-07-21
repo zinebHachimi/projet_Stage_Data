@@ -454,12 +454,12 @@ export async function getSalaryInsights(params: {
       : 0,
     stats: salaryValues.length > 0
       ? {
-          min: Math.min(...salaryValues),
-          max: Math.max(...salaryValues),
-          median: median!,
-          p25: salaryValues[Math.floor(salaryValues.length * 0.25)] ?? median!,
-          p75: salaryValues[Math.floor(salaryValues.length * 0.75)] ?? median!,
-        }
+        min: Math.min(...salaryValues),
+        max: Math.max(...salaryValues),
+        median: median!,
+        p25: salaryValues[Math.floor(salaryValues.length * 0.25)] ?? median!,
+        p75: salaryValues[Math.floor(salaryValues.length * 0.75)] ?? median!,
+      }
       : null,
     sampleJobs: jobsWithSalary.slice(0, 10).map((j) => ({
       title: j.title,
