@@ -59,8 +59,10 @@ export function AdminShell({ children, user = null }: { children: React.ReactNod
     return item;
   });
 
+  const isChatPage = pathname === "/admin/ai/chat";
+
   return (
-    <div className="admin-dashboard min-h-screen bg-[#f8fafc] text-[#1c2536] antialiased">
+    <div className={`admin-dashboard text-[#1c2536] antialiased ${isChatPage ? "h-screen overflow-hidden bg-white" : "min-h-screen bg-[#f8fafc]"}`}>
       <aside className="fixed left-0 top-0 z-30 hidden h-screen w-[270px] border-r border-[#dfe5ef] bg-white xl:block">
         <Link href={homeLink} className="flex h-[78px] items-center gap-3 px-6" aria-label="AlgoJob admin dashboard">
           <span className="flex h-9 w-9 items-center justify-center rounded-md bg-[#5d87ff] text-base font-bold text-white">
@@ -100,31 +102,36 @@ export function AdminShell({ children, user = null }: { children: React.ReactNod
           </div>
         </nav>
       </aside>
-      <div className="xl:pl-[270px]">
-        <header className="sticky top-0 z-20 flex min-h-[72px] items-center justify-between bg-[#f8fafc]/95 px-6 py-4 backdrop-blur xl:px-10">
-          <div>
-            <h1 className="text-[18px] font-semibold leading-tight text-[#1c2536]">
-              {role === "ADMIN" ? "Tableau de Bord Administrateur" : role === "ANALYST" ? "Portail Recruteur (RH)" : "Mon Espace Candidat"}
-            </h1>
-            <p className="text-sm text-[#5a6a85bf]">
-              {role === "ADMIN" ? "Gestion globale de la plateforme" : role === "ANALYST" ? "Gestion des offres et candidatures" : "Suivi des candidatures et documents"}
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
-            {user && (
-              <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
-                {user.name || user.email} ({role === "ADMIN" ? "Administrateur" : role === "ANALYST" ? "Recruteur" : "Candidat"})
-              </span>
-            )}
-            <Link href="/" className="rounded-md bg-[#5d87ff] px-4 py-2 text-sm font-semibold text-white hover:bg-[#4b73df]">
-              Site public
-            </Link>
-          </div>
-        </header>
-        <main className="mx-auto max-w-[1400px] px-6 py-[30px] xl:px-10">{children}</main>
+      <div className={isChatPage ? "xl:pl-[270px] h-full" : "xl:pl-[270px]"}>
+        {!isChatPage && (
+          <header className="sticky top-0 z-20 flex min-h-[72px] items-center justify-between bg-[#f8fafc]/95 px-6 py-4 backdrop-blur xl:px-10">
+            <div>
+              <h1 className="text-[18px] font-semibold leading-tight text-[#1c2536]">
+                {role === "ADMIN" ? "Tableau de Bord Administrateur" : role === "ANALYST" ? "Portail Recruteur (RH)" : "Mon Espace Candidat"}
+              </h1>
+              <p className="text-sm text-[#5a6a85bf]">
+                {role === "ADMIN" ? "Gestion globale de la plateforme" : role === "ANALYST" ? "Gestion des offres et candidatures" : "Suivi des candidatures et documents"}
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              {user && (
+                <span className="text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-lg border border-slate-200">
+                  {user.name || user.email} ({role === "ADMIN" ? "Administrateur" : role === "ANALYST" ? "Recruteur" : "Candidat"})
+                </span>
+              )}
+              <Link href="/" className="rounded-md bg-[#5d87ff] px-4 py-2 text-sm font-semibold text-white hover:bg-[#4b73df]">
+                Site public
+              </Link>
+            </div>
+          </header>
+        )}
+        <main className={isChatPage ? "h-full w-full overflow-hidden" : "mx-auto max-w-[1400px] px-6 py-[30px] xl:px-10"}>
+          {children}
+        </main>
       </div>
     </div>
   );
+
 }
 
 export function AdminCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {

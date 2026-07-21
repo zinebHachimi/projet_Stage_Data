@@ -348,31 +348,48 @@ export function ChatGPTInterface() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const sidebarSearchRef = useRef<HTMLInputElement>(null);
   const userScrolledUpRef = useRef<boolean>(false);
+  const [showScrollBottomBtn, setShowScrollBottomBtn] = useState(false);
+  const isProgrammaticScrollRef = useRef<boolean>(false);
 
   // Check if scroll position is near bottom
   const checkIfNearBottom = useCallback(() => {
     const el = messageLogRef.current;
     if (!el) return true;
-    const threshold = 120; // 120px from bottom
+    const threshold = 150; // 150px tolerance window
     const position = el.scrollHeight - el.scrollTop - el.clientHeight;
     return position <= threshold;
   }, []);
 
   const handleScroll = () => {
+    const el = messageLogRef.current;
+    if (!el) return;
+
+    if (isProgrammaticScrollRef.current) {
+      return;
+    }
+
     const isNearBottom = checkIfNearBottom();
     userScrolledUpRef.current = !isNearBottom;
+    setShowScrollBottomBtn(!isNearBottom);
   };
 
   const scrollToBottom = useCallback((force = false) => {
     const el = messageLogRef.current;
     if (!el) return;
+
     if (force || !userScrolledUpRef.current) {
-      el.scrollTo({
-        top: el.scrollHeight,
-        behavior: "smooth",
-      });
+      isProgrammaticScrollRef.current = true;
+      el.scrollTop = el.scrollHeight;
+      userScrolledUpRef.current = false;
+      setShowScrollBottomBtn(false);
+
+      // Reset programmatic flag after a brief frame
+      setTimeout(() => {
+        isProgrammaticScrollRef.current = false;
+      }, 50);
     }
   }, []);
+
 
   // Load chat messages and conversations
   async function load() {
@@ -1305,6 +1322,19 @@ export function ChatGPTInterface() {
               </div>
             )}
           </div>
+
+          {/* Scroll to bottom floating indicator */}
+          {showScrollBottomBtn && (
+            <button
+              type="button"
+              onClick={() => scrollToBottom(true)}
+              className="absolute bottom-28 left-1/2 -translate-x-1/2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-600 hover:text-blue-600 shadow-md rounded-full px-3 py-1.5 text-xs font-semibold flex items-center gap-1.5 transition-all z-20 cursor-pointer"
+            >
+              <ChevronDown size={14} className="animate-bounce text-blue-600" />
+              Défiler vers le bas
+            </button>
+          )}
+
 
           {/* FIXED COMPOSER (ALWAYS VISIBLE AT BOTTOM) */}
           <div className="shrink-0 border-t border-slate-200 p-4 bg-white">
