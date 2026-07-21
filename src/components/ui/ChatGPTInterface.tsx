@@ -1,6 +1,7 @@
 "use client";
 
 import React, { FormEvent, useCallback, useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import {
   Send,
   Sparkles,
@@ -32,6 +33,7 @@ import {
   Bot,
   AlertCircle,
   RefreshCw,
+  LayoutDashboard,
 } from "lucide-react";
 
 // Type Definitions
@@ -789,9 +791,10 @@ export function ChatGPTInterface() {
     : [];
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] w-full overflow-hidden bg-white border border-slate-200 rounded-2xl shadow-sm">
-      {/* Top Header Bar */}
-      <header className="shrink-0 flex items-center justify-between border-b border-slate-200 px-6 py-3.5 bg-white select-none">
+    /* ChatLayout - Dedicated Page-Level Architecture */
+    <div className="flex flex-col h-full w-full overflow-hidden bg-white">
+      {/* ChatHeader - Header of the dedicated page layout */}
+      <header className="shrink-0 flex items-center justify-between border-b border-slate-200 px-6 py-4 bg-white select-none">
         <div className="flex items-center gap-3">
           <button
             type="button"
@@ -816,6 +819,15 @@ export function ChatGPTInterface() {
         </div>
 
         <div className="flex items-center gap-2">
+          {/* Dashboard Back Link for Mobile */}
+          <Link
+            href="/admin"
+            className="xl:hidden flex items-center gap-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-50 px-2.5 py-1.5 rounded-xl text-xs font-semibold transition border border-slate-200 bg-white"
+          >
+            <LayoutDashboard size={14} />
+            <span>Dashboard</span>
+          </Link>
+
           <button
             type="button"
             onClick={startNewChat}
@@ -933,7 +945,7 @@ export function ChatGPTInterface() {
         )}
 
         {/* Conversation & Composer Column */}
-        <main className="flex-1 flex flex-col min-h-0 overflow-hidden bg-white relative">
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden bg-white relative">
           {error && (
             <div className="mx-6 mt-4 p-3 bg-rose-50 border border-rose-200 rounded-xl text-xs text-rose-700 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2">
@@ -946,11 +958,12 @@ export function ChatGPTInterface() {
             </div>
           )}
 
-          {/* Conversation Messages Container (ONLY SCROLLABLE REGION) */}
+          {/* ConversationViewport - designated scroll owner */}
           <div
             ref={messageLogRef}
             onScroll={handleScroll}
             className="flex-1 min-h-0 overflow-y-auto px-4 md:px-8 py-6 space-y-6 scroll-smooth"
+            id="chat-conversation-viewport"
           >
             {loading ? (
               <div className="flex h-full items-center justify-center">
@@ -999,7 +1012,8 @@ export function ChatGPTInterface() {
                 </div>
               </div>
             ) : (
-              <div className="max-w-4xl mx-auto space-y-6">
+              /* MessageList - centered conversation content */
+              <div className="max-w-3xl mx-auto w-full space-y-6 px-2 md:px-4">
                 {activeMessages.map((message) => {
                   const isUser = message.role === "user";
                   const meta = getMetadata(message);
@@ -1336,9 +1350,9 @@ export function ChatGPTInterface() {
           )}
 
 
-          {/* FIXED COMPOSER (ALWAYS VISIBLE AT BOTTOM) */}
-          <div className="shrink-0 border-t border-slate-200 p-4 bg-white">
-            <div className="max-w-4xl mx-auto space-y-2">
+          {/* Composer - input workspace section */}
+          <div className="shrink-0 border-t border-slate-200/80 p-4 bg-white">
+            <div className="max-w-3xl mx-auto space-y-3 w-full">
               {/* Quick chips bar when message list exists */}
               {activeMessages.length > 0 && (
                 <div className="flex items-center justify-between gap-2 overflow-x-auto pb-1 select-none">
@@ -1375,7 +1389,7 @@ export function ChatGPTInterface() {
               {/* Message Input Form */}
               <form
                 onSubmit={submit}
-                className="flex flex-col bg-slate-50/80 border border-slate-300 rounded-2xl p-2.5 focus-within:border-blue-600 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-100 transition"
+                className="flex flex-col bg-slate-50 border border-slate-200 focus-within:border-slate-300 focus-within:ring-2 focus-within:ring-blue-500/10 focus-within:bg-white rounded-2xl p-2.5 transition-all shadow-sm"
               >
                 <textarea
                   ref={textareaRef}
@@ -1429,7 +1443,7 @@ export function ChatGPTInterface() {
               </div>
             </div>
           </div>
-        </main>
+        </div>
       </div>
     </div>
   );
