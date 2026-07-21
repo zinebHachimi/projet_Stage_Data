@@ -1,7 +1,7 @@
 "use client";
 
-import { AIChatAssistant } from "@/components/ui/AIChatAssistant";
+import { ChatGPTInterface } from "@/components/ui/ChatGPTInterface";
 
 export default function AdminChatPage() {
-  return <AIChatAssistant />;
+  return <ChatGPTInterface />;
 }
